@@ -150,7 +150,7 @@ void MainGame::UpdateDeltaTime()
 	lastFrameTime = currentFrameTime;
 }
 
-// in place of manually calling individual linker methods
+// Only use as follows: InvokeShaderLink(rimShader, [this]() {linkRimShader(); });
 template<typename Func>
 void InvokeShaderLink(Shader shader, Func linkerFunc) {
 	shader.Bind();
