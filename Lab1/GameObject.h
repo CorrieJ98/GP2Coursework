@@ -26,25 +26,20 @@ struct GameObject {
 
 	GameObject() : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(0, 0) {}
 
-	GameObject(std::string mesh_filepath, std::string shader_filepath, std::string texture_filepath) : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)) {};
-
-	GameObject(Transform& _transform, Mesh& _mesh, Shader& _shader, Texture& _texture, Layer& _layer) {
-		this->transform = _transform;
+	GameObject(Mesh& _mesh, Shader& _shader, Texture& _texture) : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(0, 0) {
 		this->mesh = _mesh;
 		this->shader = _shader;
 		this->texture = _texture;
-		this->layer = _layer;
 	}
 
 	~GameObject() {
 		// TODO cleanup in here
 	}
 
-	inline void SetRadius(float r) { this->radius = r; }
-	inline float GetRadius() { return this->radius; }
-
-	void init() {
-		mesh.updateSphereData(*transform.GetPos(), this->radius);
+	void init(Mesh& _mesh, Shader& _shader, Texture& _texture) {
+		this->mesh = _mesh;
+		this->shader = _shader;
+		this->texture = _texture;
 	}
 
 	Transform transform;
@@ -52,5 +47,4 @@ struct GameObject {
 	Shader shader;
 	Texture texture;
 	Layer layer;
-	float radius;
 };

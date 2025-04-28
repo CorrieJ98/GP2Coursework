@@ -1,15 +1,19 @@
 #pragma once
 #include <iostream>
+#include <string>
 #include <functional>
 #include <SDL\SDL.h>
 #include <GL/glew.h>
 #include <chrono>
+#include "Audio.h"
+#include "Camera.h"
 #include "Display.h" 
+#include "GameObject.h"
 #include "Shader.h"
 #include "Mesh.h"
 #include "Texture.h"
 #include "transform.h"
-#include "Audio.h"
+
 
 enum class GameState{PLAY, EXIT};
 
@@ -32,14 +36,18 @@ private:
 	void linkRimShader();
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
 	void UpdateDeltaTime();
+	void InitGameObjects();
+	void UpdateGameObjects(float dt);
 
 	//void playAudio(unsigned int Source, glm::vec3 pos);
 
 	Display _gameDisplay;
 	GameState _gameState;
+	Camera cam;
+	
 	Mesh monkeyMesh;
 	Mesh ballMesh;
-	Camera cam;
+
 	Shader fogShader;
 	Shader toonShader;
 	Shader rimShader;
@@ -47,6 +55,9 @@ private:
 	Texture waterTexture;
 	
 	//Audio audioDevice;
+
+	GameObject monkey;
+	GameObject ball;
 
 	float counter;
 	std::chrono::high_resolution_clock::time_point lastFrameTime;
