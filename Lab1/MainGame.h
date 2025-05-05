@@ -31,9 +31,12 @@ private:
 	void processInput();
 	void gameLoop();
 	void drawGame();
+	
 	void linkFogShader();
 	void linkToon();
 	void linkRimShader();
+	void linkBrickShader();
+
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
 	void UpdateDeltaTime();
 	void InitGameObjects();
@@ -51,6 +54,7 @@ private:
 	Shader fogShader;
 	Shader toonShader;
 	Shader rimShader;
+	Shader brickShader;
 
 	Texture waterTexture;
 	

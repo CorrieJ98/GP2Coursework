@@ -100,6 +100,12 @@
     <None Include="..\res\Rim.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="bricks.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="bricks.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\monkey3.obj">

@@ -29,6 +29,8 @@ void MainGame::initSystems()
 	fogShader.init("..\\res\\fogShader.vert", "..\\res\\fogShader.frag"); //new shader
 	toonShader.init("..\\res\\shaderToon.vert", "..\\res\\shaderToon.frag"); //new shader
 	rimShader.init("..\\res\\Rim.vert", "..\\res\\Rim.frag");
+	brickShader.init("..\\res\\bricks.vert", "..\\res\\bricks.frag");
+	
 	waterTexture.load("..\\res\\water.jpg"); //load texture
 
 	cam.initCamera(glm::vec3(2, 0, -4), 70.0f, (float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 1000.0f, 4.0f, 1.5f, false);
@@ -125,6 +127,11 @@ void MainGame::linkRimShader()
 
 }
 
+void MainGame::linkBrickShader()
+{
+	
+}
+
 void MainGame::linkFogShader()
 {
 	fogShader.setMat4("u_pm", cam.GetProjectionMatrix());
@@ -188,20 +195,27 @@ void MainGame::drawGame()
 	_gameDisplay.clearDisplay(0.35f, 0.4f, 0.5f, 0.5f); //sets our background colour
 
 	waterTexture.Bind(0);
-
-	//monkeyMesh.updateSphereData(*transform.GetPos(), 0.62f);		
 	InvokeShaderLink(rimShader, [this]() { linkRimShader(); });
 	//InvokeShaderLink(fogShader, [this]() { linkFogShader(); });
-	//rimShader.Bind();
-	//linkRimShader();
-	rimShader.Update(monkey.transform, cam);
-	//monkeyMesh.draw();
-	//ballMesh.draw();
 
-	//monkey.Update();
-	//cam.setLook(*transform.GetPos());
+	//rimShader.Update(monkey.transform, cam);
+	//fogShader.Bind();
+	//fogShader.Update(monkey.transform,cam);
 	UpdateGameObjects(deltaTime);
 	counter += deltaTime;
+
+#pragma region obsolete
+	//monkeyMesh.updateSphereData(*transform.GetPos(), 0.62f);		
+//InvokeShaderLink(fogShader, [this]() { linkFogShader(); });
+//rimShader.Bind();
+//linkRimShader();
+//monkeyMesh.draw();
+//ballMesh.draw();
+
+//monkey.Update();
+//cam.setLook(*transform.GetPos());
+
+#pragma endregion
 
 
 	// this confirms camera pos does in fact change.
