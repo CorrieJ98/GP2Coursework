@@ -182,9 +182,9 @@ void MainGame::UpdateAllGameObjects()
 
 void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod)
 {
-	gO.transform.SetPos(glm::vec3((sin(counter += deltaTime)), 0.0, 0.0));
-	gO.transform.SetRot(glm::vec3(0.0, counter * 0.5, 0.0));
-	gO.transform.SetScale(glm::vec3(1.0, 1.0, 1.0));
+	gO.transform.SetPos(position);
+	gO.transform.SetRot(rotation);
+	gO.transform.SetScale(scale);
 	gO.shader.Bind();
 	linkerMethod(gO);
 	gO.shader.Update(gO.transform, cam);
