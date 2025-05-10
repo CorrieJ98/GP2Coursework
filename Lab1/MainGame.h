@@ -31,16 +31,14 @@ private:
 	void processInput();
 	void gameLoop();
 	void drawGame();
-	
-	void linkFogShader();
-	void linkToon();
-	void linkRimShader();
-	void linkBrickShader();
-
+	void linkFogShader(GameObject& gameObject);
+	void linkToonShader(GameObject& gameObject);
+	void linkRimShader(GameObject& gameObject);
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
 	void UpdateDeltaTime();
 	void InitGameObjects();
-	void UpdateGameObjects(float dt);
+	void UpdateAllGameObjects();
+	void UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod);
 
 	//void playAudio(unsigned int Source, glm::vec3 pos);
 
@@ -54,7 +52,6 @@ private:
 	Shader fogShader;
 	Shader toonShader;
 	Shader rimShader;
-	Shader brickShader;
 
 	Texture waterTexture;
 	
