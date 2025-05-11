@@ -18,6 +18,7 @@ void Shader::init(const std::string& vertFile, const std::string& fragFile)
 	glBindAttribLocation(shaderID, 0, "VertexPosition"); // associate attribute variable with our shader program attribute (in this case attribute vec3 position;)
 	glBindAttribLocation(shaderID, 1, "VertexTexCoord");
 	glBindAttribLocation(shaderID, 2, "VertexNormal");
+	glBindAttribLocation(shaderID, 3, "VertexUV");
 
 	glLinkProgram(shaderID); //create executables that will run on the GPU shaders
 	CheckShaderError(shaderID, GL_LINK_STATUS, true, "Error: Shader program linking failed"); // cheack for error

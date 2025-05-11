@@ -48,17 +48,21 @@ private:
 	
 	Mesh monkeyMesh;
 	Mesh ballMesh;
+	Mesh planeMesh;
 
 	Shader fogShader;
 	Shader toonShader;
 	Shader rimShader;
 
 	Texture waterTexture;
+	Texture brickWallTexture;
+	Texture brickGroundTexture;
 	
 	//Audio audioDevice;
 
 	GameObject monkey;
 	GameObject ball;
+	GameObject plane;
 
 	float counter;
 	std::chrono::high_resolution_clock::time_point lastFrameTime;
