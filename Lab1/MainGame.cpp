@@ -30,21 +30,20 @@ void MainGame::initSystems()
 	toonShader.init("..\\res\\shaderToon.vert", "..\\res\\shaderToon.frag"); //new shader
 	rimShader.init("..\\res\\Rim.vert", "..\\res\\Rim.frag");
 	waterTexture.load("..\\res\\water.jpg"); //load texture
+	brickWallTexture.load("..\\res\\brickwall.jpg");
+	brickGroundTexture.load("..\\res\\bricks.jpg");
 
 	cam.initCamera(glm::vec3(2, 0, -4), 70.0f, (float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 1000.0f, 4.0f, 1.5f, false);
+
+	InitGameObjects();
 
 	counter = 1.0f;
 }
 
 void MainGame::gameLoop()
 {
-	bool run_once = false;
 	while (_gameState != GameState::EXIT)
 	{
-		// run once during first loop
-		if (!run_once) {
-			InitGameObjects();
-		}
 
 		UpdateDeltaTime();
 		processInput();
@@ -125,18 +124,17 @@ void MainGame::linkRimShader(GameObject& gameObject)
 
 }
 
+
+// TODO not displaying this shader
 void MainGame::linkFogShader(GameObject& gameObject)
 {
-	fogShader.setMat4("u_pm", cam.GetProjectionMatrix());
-	fogShader.setMat4("u_vm", cam.GetViewMatrix());
-	fogShader.setFloat("maxDist", 20.0f);
-	fogShader.setFloat("minDist", 1.0f);
-	fogShader.setVec3("fogColor", glm::vec3(0.35f, 0.4f, 0.5f));
+	fogShader.setMat4("transform", gameObject.transform.GetModel());
 }
 
 void MainGame::linkToonShader(GameObject& gameObject)
 {
 	toonShader.setMat4("modelMatrix", gameObject.transform.GetModel());
+	toonShader.setMat4("transform", gameObject.transform.GetMVP(cam));
 	toonShader.setVec3("lightDir", glm::normalize(glm::vec3(0.0f)));
 	toonShader.setVec3("lightDir", glm::cross(-cam.GetForwardVec(), cam.getPos()));
 }
@@ -156,35 +154,47 @@ void MainGame::UpdateDeltaTime()
 
 void MainGame::InitGameObjects()
 {
-	monkey.init(monkeyMesh, rimShader, waterTexture);
-	ball.init(ballMesh, toonShader, waterTexture);
+	monkey.init(monkeyMesh, fogShader, waterTexture);
+	ball.init(ballMesh, fogShader, brickWallTexture);
+	plane.init(planeMesh, fogShader, brickGroundTexture);
 }
 
 void MainGame::UpdateAllGameObjects()
 {
+	// GameObject
+	// positional modifiers
+	// rotational modifiers
+	// GameObject scale
+	// shaders
+
 	// monkey
 	UpdateGameObject(monkey, 
 		glm::vec3(sin(counter += deltaTime),0,0), 
 		glm::vec3(0,counter * 0.5f,0), 
 		glm::vec3(1,1,1), 
-		std::bind(&MainGame::linkRimShader, this, std::placeholders::_1));
+		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1));
 
 	// ball
 	UpdateGameObject(ball,
-		glm::vec3(0,cos(counter += deltaTime), 0),
+		glm::vec3(10,cos(counter += deltaTime), -2),
 		glm::vec3(0,0, -counter * 0.5f),
 		glm::vec3(1, 1, 1), 
-		std::bind(&MainGame::linkToonShader, this, std::placeholders::_1));
+		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1));
 
-	// almost working, still not passing independantly...
+	// ground plane
+	UpdateGameObject(plane,
+		glm::vec3(0, -1, 0),
+		glm::vec3(0, 0, 0),
+		glm::vec3(0.5),
+		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1));
 
 }
 
 void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod)
 {
-	gO.transform.SetPos(glm::vec3((sin(counter += deltaTime)), 0.0, 0.0));
-	gO.transform.SetRot(glm::vec3(0.0, counter * 0.5, 0.0));
-	gO.transform.SetScale(glm::vec3(1.0, 1.0, 1.0));
+	gO.transform.SetPos(position);
+	gO.transform.SetRot(rotation);
+	gO.transform.SetScale(scale);
 	gO.shader.Bind();
 	linkerMethod(gO);
 	gO.shader.Update(gO.transform, cam);
