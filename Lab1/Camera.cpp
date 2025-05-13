@@ -40,9 +40,6 @@ void Camera::Update(float dt)
 		YawFixed(GetTurnSpeed() * dt);
 	}
 
-	if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
-		// jump in here??
-	}
 
 	// TODO pitch modifies the Yaw axis, meaning the camera X axis can Roll
 	// off of the horizon...not sure how to fix this at all, disabling Pitch for now.

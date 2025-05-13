@@ -23,18 +23,13 @@ public:
 	MainGame();
 	~MainGame();
 
-	void run();
-
-	void testObjState() {
-		monkey.state != monkey.state;
-	}
-
+	void Run();
 private:
 
-	void initSystems();
-	void processInput();
-	void gameLoop();
-	void drawGame();
+	void InitSystems();
+	void ProcessInput();
+	void GameLoop();
+	void DrawGame();
 	void linkFogShader(GameObject& gameObject);
 	void linkToonShader(GameObject& gameObject);
 	void linkRimShader(GameObject& gameObject);
