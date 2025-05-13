@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #include "GameObject.h"
 
 class Character : GameObject{
@@ -21,10 +23,10 @@ public:
 	void SetHealth(int health) { this->m_health = health; }
 	void SetDamage(int damage) { this->m_damage = damage; }
 	void SetMoveSpeed(float moveSpeed) { this->m_moveSpeed = moveSpeed; }
-	void ToggleMoveable() { this->m_moveable = !this->m_moveable; }
 
 private:
 
+	void ToggleMoveable() { this->m_moveable = !this->m_moveable; }
 	void Die() { this->state = false; this->m_moveable = false;  this->transform.SetPos(glm::vec3(-10, -10, -10)); };
 	
 	std::string m_characterName;
@@ -34,4 +36,6 @@ private:
 	int m_damage;
 	bool m_moveable;
 	float m_moveSpeed;
+
+
 };
