@@ -6,6 +6,7 @@
 struct Camera
 {
 public:
+
 	Camera()
 	{
 		this->m_moveSpeed = 5.0f;

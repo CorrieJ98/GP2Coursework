@@ -24,6 +24,7 @@ void MainGame::initSystems()
 	//whistle = audioDevice.loadSound("..\\res\\bang.wav");
 	//backGroundMusic = audioDevice.loadSound("..\\res\\background.wav");
 
+	planeMesh.loadModel("..\\res\\surface.obj");
 	monkeyMesh.loadModel("..\\res\\monkey3.obj");
 	ballMesh.loadModel("..\\res\\Ball.obj");
 	fogShader.init("..\\res\\fogShader.vert", "..\\res\\fogShader.frag"); //new shader
@@ -154,9 +155,9 @@ void MainGame::UpdateDeltaTime()
 
 void MainGame::InitGameObjects()
 {
-	monkey.init(monkeyMesh, fogShader, waterTexture);
-	ball.init(ballMesh, fogShader, brickWallTexture);
-	plane.init(planeMesh, fogShader, brickGroundTexture);
+	monkey.init(monkeyMesh, fogShader, waterTexture,true);
+	ball.init(ballMesh, fogShader, brickWallTexture, true);
+	plane.init(planeMesh, fogShader, brickGroundTexture, true);
 }
 
 void MainGame::UpdateAllGameObjects()
@@ -172,48 +173,64 @@ void MainGame::UpdateAllGameObjects()
 		glm::vec3(sin(counter += deltaTime),0,0), 
 		glm::vec3(0,counter * 0.5f,0), 
 		glm::vec3(1,1,1), 
-		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1));
+		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
+		false);
 
 	// ball
 	UpdateGameObject(ball,
 		glm::vec3(10,cos(counter += deltaTime), -2),
 		glm::vec3(0,0, -counter * 0.5f),
 		glm::vec3(1, 1, 1), 
-		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1));
+		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
+		false);
 
 	// ground plane
 	UpdateGameObject(plane,
-		glm::vec3(0, -1, 0),
+		glm::vec3(0, -16, 0),
 		glm::vec3(0, 0, 0),
 		glm::vec3(0.5),
-		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1));
+		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
+		false);
 
 }
 
-void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod)
+void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod, bool useIndices)
 {
+	
 	gO.transform.SetPos(position);
 	gO.transform.SetRot(rotation);
 	gO.transform.SetScale(scale);
-	gO.shader.Bind();
-	linkerMethod(gO);
-	gO.shader.Update(gO.transform, cam);
-	gO.mesh.draw();
+
+	if (gO.state)
+	{
+		gO.texture.Bind(0);
+		gO.shader.Bind();
+		linkerMethod(gO);
+		gO.shader.Update(gO.transform, cam);
+
+		if (useIndices) {
+			gO.mesh.drawVertexes();
+			std::cout << "drawingVertexes of plane" << std::endl;
+		}
+		else {
+			gO.mesh.draw();
+		}
+	}
 }
 
 void MainGame::drawGame()
 {
 	_gameDisplay.clearDisplay(0.35f, 0.4f, 0.5f, 0.5f); //sets our background colour
 
-	waterTexture.Bind(0);
-	rimShader.Update(monkey.transform, cam);
+	//waterTexture.Bind(0);
+	//rimShader.Update(monkey.transform, cam);
 	UpdateAllGameObjects();
 	counter += deltaTime;
 
 
 	// this confirms camera pos does in fact change.
 	//std::cout << cam.getPos().x << " " << cam.getPos().y << " " << cam.getPos().z << '\n';
-	std::cout << monkey.transform.GetPos().x << " " << monkey.transform.GetPos().y << " " << monkey.transform.GetPos().z << '\n';
+	//std::cout << monkey.transform.GetPos().x << " " << monkey.transform.GetPos().y << " " << monkey.transform.GetPos().z << '\n';
 
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnd();

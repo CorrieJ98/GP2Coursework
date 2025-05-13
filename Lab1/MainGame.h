@@ -25,6 +25,10 @@ public:
 
 	void run();
 
+	void testObjState() {
+		monkey.state != monkey.state;
+	}
+
 private:
 
 	void initSystems();
@@ -38,7 +42,7 @@ private:
 	void UpdateDeltaTime();
 	void InitGameObjects();
 	void UpdateAllGameObjects();
-	void UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod);
+	void UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod, bool useIndices);
 
 	//void playAudio(unsigned int Source, glm::vec3 pos);
 

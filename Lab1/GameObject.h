@@ -18,28 +18,31 @@ struct Layer {
 		this->interactable = _interactable;
 	};
 
-	uint8_t collision;		// what can this collide with?
-	uint8_t interactable;	// what can this interact with?
+	uint8_t collision;		// what can this collide with?	0-255
+	uint8_t interactable;	// what can this interact with?	0-255
 };
 
 struct GameObject {
 
-	GameObject() : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(0, 0) {}
+	GameObject() : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(0, 0), state(false){}
 
-	GameObject(Mesh& _mesh, Shader& _shader, Texture& _texture) : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(0, 0) {
+	GameObject(Mesh& _mesh, Shader& _shader, Texture& _texture) : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(0, 0), state(false) {
 		this->mesh = _mesh;
 		this->shader = _shader;
 		this->texture = _texture;
 	}
 
 	~GameObject() {
-		// TODO cleanup in here
+		this->texture.~Texture();
+		this->shader.~Shader();
+		this->mesh.~Mesh();
 	}
 
-	void init(Mesh& _mesh, Shader& _shader, Texture& _texture) {
+	void init(Mesh& _mesh, Shader& _shader, Texture& _texture, bool _state) {
 		this->mesh = _mesh;
 		this->shader = _shader;
 		this->texture = _texture;
+		this->state = _state;
 	}
 
 	Transform transform;
@@ -47,4 +50,7 @@ struct GameObject {
 	Shader shader;
 	Texture texture;
 	Layer layer;
+	bool state;
 };
+
+// TODO, enable and disable states, get something shooting a fireball!!!
