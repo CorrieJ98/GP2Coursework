@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <functional>
 #include <string>
 #include "Mesh.h"
 #include "transform.h"
@@ -28,33 +27,28 @@ struct Layer {
 
 struct GameObject {
 
-	GameObject() : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(1,1,0), state(false){}
+	GameObject() : transform(glm::vec3(0,0,0), glm::vec3(0,0,0), glm::vec3(1,1,1)), layer(1, 1, 0), state(false) {}
 
-	GameObject(Mesh& _mesh, Shader& _shader, Texture& _texture) : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(0, 0, 0), state(false) {
-		this->mesh = _mesh;
-		this->shader = _shader;
-		this->texture = _texture;
-	}
-
-	~GameObject() {
-		this->texture.~Texture();
-		this->shader.~Shader();
-		this->mesh.~Mesh();
-	}
-
-	void init(Mesh& _mesh, Shader& _shader, Texture& _texture, bool _state) {
-		this->mesh = _mesh;
-		this->shader = _shader;
-		this->texture = _texture;
+	void init(std::shared_ptr<Mesh> _mesh, std::shared_ptr<Shader> _shader, std::shared_ptr<Texture> _texture, bool _state) {
 		this->state = _state;
+		this->transform.SetPos(glm::vec3(0, 0, 0));
+		this->transform.SetRot(glm::vec3(0, 0, 0));
+		this->transform.SetScale(glm::vec3(1, 1, 1));
+		this->mesh = _mesh;
+		this->shader = _shader;
+		this->texture = _texture;
+	}
+
+	virtual void Update() {
+		std::cout << "ERROR: `Update()` called from GameObject: please override" << std::endl;
 	}
 
 	void ToggleState() { this->state = !this->state; }
 
 	Transform transform;
-	Mesh mesh;
-	Shader shader;
-	Texture texture;
+	std::shared_ptr<Mesh> mesh;
+	std::shared_ptr<Shader> shader;
+	std::shared_ptr<Texture> texture;
 	Layer layer;
 	bool state;
 };

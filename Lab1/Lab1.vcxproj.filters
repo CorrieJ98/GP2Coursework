@@ -45,6 +45,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Assets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h">
@@ -89,6 +92,9 @@
     <ClInclude Include="pathfinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Assets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\fogShader.frag">
@@ -113,6 +119,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="bricks.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\15915199.ppt">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

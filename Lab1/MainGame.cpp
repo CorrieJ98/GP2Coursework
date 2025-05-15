@@ -24,15 +24,16 @@ void MainGame::InitSystems()
 	//whistle = audioDevice.loadSound("..\\res\\bang.wav");
 	//backGroundMusic = audioDevice.loadSound("..\\res\\background.wav");
 
-	planeMesh.loadModel("..\\res\\surface.obj");
-	monkeyMesh.loadModel("..\\res\\monkey3.obj");
-	ballMesh.loadModel("..\\res\\Ball.obj");
-	fogShader.init("..\\res\\fogShader.vert", "..\\res\\fogShader.frag"); //new shader
-	toonShader.init("..\\res\\shaderToon.vert", "..\\res\\shaderToon.frag"); //new shader
-	rimShader.init("..\\res\\Rim.vert", "..\\res\\Rim.frag");
-	waterTexture.load("..\\res\\water.jpg"); //load texture
-	brickWallTexture.load("..\\res\\brickwall.jpg");
-	brickGroundTexture.load("..\\res\\bricks.jpg");
+	// now handled in Assets.cpp
+	//planeMesh.loadModel("..\\res\\surface.obj");
+	//monkeyMesh.loadModel("..\\res\\monkey3.obj");
+	//ballMesh.loadModel("..\\res\\Ball.obj");
+	//fogShader.init("..\\res\\fogShader.vert", "..\\res\\fogShader.frag"); //new shader
+	//toonShader.init("..\\res\\shaderToon.vert", "..\\res\\shaderToon.frag"); //new shader
+	//rimShader.init("..\\res\\Rim.vert", "..\\res\\Rim.frag");
+	//waterTexture.load("..\\res\\water.jpg"); //load texture
+	//brickWallTexture.load("..\\res\\brickwall.jpg");
+	//brickGroundTexture.load("..\\res\\bricks.jpg");
 
 	cam.initCamera(glm::vec3(2, 0, -4), 70.0f, (float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 1000.0f, 4.0f, 1.5f, false);
 
@@ -111,11 +112,11 @@ void MainGame::linkRimShader(GameObject& gameObject)
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	rimShader.setMat4("modelMatrix", gameObject.transform.GetModel());
-	rimShader.setMat4("viewMatrix", cam.GetViewMatrix());
-	rimShader.setFloat("rimPower", 3.0f);
-	rimShader.setVec3("rimColor", glm::vec3(0.8f, 0.0f, 0.0f));
-	rimShader.setVec3("camPos", cam.getPos());
+	s_RimShader->setMat4("modelMatrix", gameObject.transform.GetModel());
+	s_RimShader->setMat4("viewMatrix", cam.GetViewMatrix());
+	s_RimShader->setFloat("rimPower", 3.0f);
+	s_RimShader->setVec3("rimColor", glm::vec3(0.8f, 0.0f, 0.0f));
+	s_RimShader->setVec3("camPos", cam.getPos());
 
 
 	/*transform.SetPos(glm::vec3(1.0, 0.0, 0.0));
@@ -129,15 +130,15 @@ void MainGame::linkRimShader(GameObject& gameObject)
 // TODO not displaying this shader
 void MainGame::linkFogShader(GameObject& gameObject)
 {
-	fogShader.setMat4("transform", gameObject.transform.GetModel());
+	s_FogShader->setMat4("transform", gameObject.transform.GetModel());
 }
 
 void MainGame::linkToonShader(GameObject& gameObject)
 {
-	toonShader.setMat4("modelMatrix", gameObject.transform.GetModel());
-	toonShader.setMat4("transform", gameObject.transform.GetMVP(cam));
-	toonShader.setVec3("lightDir", glm::normalize(glm::vec3(0.0f)));
-	toonShader.setVec3("lightDir", glm::cross(-cam.GetForwardVec(), cam.getPos()));
+	s_ToonShader->setMat4("modelMatrix", gameObject.transform.GetModel());
+	s_ToonShader->setMat4("transform", gameObject.transform.GetMVP(cam));
+	s_ToonShader->setVec3("lightDir", glm::normalize(glm::vec3(0.0f)));
+	s_ToonShader->setVec3("lightDir", glm::cross(-cam.GetForwardVec(), cam.getPos()));
 }
 
 
@@ -155,9 +156,10 @@ void MainGame::UpdateDeltaTime()
 
 void MainGame::InitGameObjects()
 {
-	monkey.init(monkeyMesh, fogShader, waterTexture, true);
-	ball.init(ballMesh, fogShader, brickWallTexture, true);
-	plane.init(planeMesh, fogShader, brickGroundTexture, true);
+	monkey.init(s_MonkeyMesh, s_FogShader, s_WaterTexture, true);
+	ball.init(s_BallMesh, s_FogShader, s_WaterTexture, true);
+	plane.init(s_PlaneMesh, s_FogShader, s_BrickGroundTexture, true);
+	capsule.init(s_CapsuleMesh, s_FogShader, s_BrickGroundTexture, true);
 }
 
 void MainGame::UpdateAllGameObjects()
@@ -192,6 +194,8 @@ void MainGame::UpdateAllGameObjects()
 		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
 		false);
 
+	//
+
 }
 
 void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod, bool altDrawingMethod)
@@ -203,16 +207,16 @@ void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 ro
 
 	if (gO.state)
 	{
-		gO.texture.Bind(0);
-		gO.shader.Bind();
+		gO.texture->Bind(0);
+		gO.shader->Bind();
 		linkerMethod(gO);
-		gO.shader.Update(gO.transform, cam);
+		gO.shader->Update(gO.transform, cam);
 
 		if (altDrawingMethod) {
-			gO.mesh.drawVertexes();
+			gO.mesh->drawVertexes();
 		}
 		else {
-			gO.mesh.draw();
+			gO.mesh->draw();
 		}
 	}
 }
