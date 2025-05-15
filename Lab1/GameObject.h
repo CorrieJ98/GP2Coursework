@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <string>
 #include "Mesh.h"
 #include "transform.h"
 #include "Shader.h"
