@@ -56,6 +56,7 @@ class Mesh
 {
 public:
 	Mesh();
+	Mesh(const std::string& filepath);
 	~Mesh();
 
 	void drawVertexes();

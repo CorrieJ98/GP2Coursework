@@ -9,6 +9,11 @@ Texture::Texture()
 	//textureHandler = 0;
 }
 
+Texture::Texture(const std::string& filepath)
+{
+	load(filepath);
+}
+
 void Texture::load(const std::string& fileName)
 {
 	textureHandler = 1;

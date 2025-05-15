@@ -6,6 +6,7 @@ class Texture
 {
 public:
 	Texture();
+	Texture(const std::string& filepath);
 	
 	void load(const std::string& fileName);
 	void loadNormals(const std::string& fileName);

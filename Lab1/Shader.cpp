@@ -4,6 +4,11 @@ Shader::Shader()
 {
 }
 
+Shader::Shader(const std::string& vtxfilepath, const std::string& fragfilepath)
+{
+	init(vtxfilepath, fragfilepath);
+}
+
 void Shader::init(const std::string& vertFile, const std::string& fragFile)
 {
 	shaderID = glCreateProgram(); // create shader program (openGL saves as ref number)

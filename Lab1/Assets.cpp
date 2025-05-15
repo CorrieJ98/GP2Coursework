@@ -1,10 +1,10 @@
 #include "Assets.h"
 
 #pragma region Mesh
-std::shared_ptr<Mesh> s_PlaneMesh = std::make_shared<Mesh>("..\\res\\surface.obj");
-std::shared_ptr<Mesh> s_MonkeyMesh = std::make_shared<Mesh>("..\\res\\monkey3.obj");
-std::shared_ptr<Mesh> s_BallMesh = std::make_shared<Mesh>("..\\res\\Ball.obj");
-std::shared_ptr<Mesh> s_CapsuleMesh = std::make_shared<Mesh>("..\\res\\capsule.obj");
+std::shared_ptr<Mesh> s_PlaneMesh = std::make_shared<Mesh>("..\\res\\models\\surface.obj");
+std::shared_ptr<Mesh> s_MonkeyMesh = std::make_shared<Mesh>("..\\res\\models\\monkey3.obj");
+std::shared_ptr<Mesh> s_BallMesh = std::make_shared<Mesh>("..\\res\\models\\Ball.obj");
+std::shared_ptr<Mesh> s_CapsuleMesh = std::make_shared<Mesh>("..\\res\\models\\capsule.obj");
 #pragma endregion
 
 #pragma region Shader

@@ -10,6 +10,7 @@ class Shader
 {
 public:
 	Shader();
+	Shader(const std::string& vtxfilepath, const std::string& fragfilepath);
 
 	void Bind(); //Set gpu to use our shaders
 	void Update(const Transform& transform, const Camera& camera);
