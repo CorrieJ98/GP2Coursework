@@ -70,8 +70,6 @@ public:
 
 private:
 
-
-
 	enum
 	{
 		POSITION_VERTEXBUFFER,
