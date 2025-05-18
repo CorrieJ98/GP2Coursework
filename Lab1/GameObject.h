@@ -26,8 +26,8 @@ struct Layer {
 	uint8_t team;			// what team is this object on? 0-255
 };
 
-struct GameObject {
-
+class GameObject {
+public:
 	GameObject() : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(1,1,0), state(false){}
 
 	GameObject(Mesh& _mesh, Shader& _shader, Texture& _texture) : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(0, 0, 0), state(false) {
@@ -49,7 +49,13 @@ struct GameObject {
 		this->state = _state;
 	}
 
+	virtual void Update() { std::cout << "ERROR: Update() called from base" << std::endl; }
+
 	void ToggleState() { this->state = !this->state; }
+
+	glm::vec3 GetDirectionTowards(GameObject& from, GameObject& to) {
+		return to.transform.GetPos() - from.transform.GetPos();
+	}
 
 	Transform transform;
 	Mesh mesh;

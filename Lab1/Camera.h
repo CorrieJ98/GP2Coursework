@@ -33,12 +33,12 @@ public:
 		return this->m_pos;
 	}
 
-	inline float GetMoveSpeed() const
+	inline float GetCamMoveSpeed() const
 	{
 		return this->m_moveSpeed;
 	}
 
-	inline float GetTurnSpeed() const
+	inline float GetCamTurnSpeed() const
 	{
 		return this->m_turnSpeed;
 	}

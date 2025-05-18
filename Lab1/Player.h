@@ -2,17 +2,11 @@
 #include "Character.h"
 #include "Camera.h"
 
-class Player : Character {
-
+class Player : public Camera, public Character {
 public:
-
+	void Update(float dt);
 
 private:
-	void SlaveCameraFirstPerson();
-	void SlaveCameraThirdPerson();
-	void IsolateCamera();
-
-	void Update();
-
-
+	void SyncTransformWithCam();
+	void ParseInputs(float dt);
 };

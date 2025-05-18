@@ -1,11 +1,22 @@
-#include "Camera.h"
+#include "Player.h"
 
-void Camera::Update(float dt)
+void Player::Update(float dt)
 {
-	// TODO currently diagonal movement has the root2 problem
-	// how to normalise velocity??
+	SyncTransformWithCam();
+	ParseInputs(dt);
+}
+
+void Player::SyncTransformWithCam()
+{
+	this->transform.SetPos(this->getPos());
+}
+
+void Player::ParseInputs(float dt)
+{
 
 #pragma region Keybindings
+
+	// TODO Fix root2 problem
 	// W
 	if (GetKeyState(0x57) & 0x8000)
 	{
@@ -55,6 +66,7 @@ void Camera::Update(float dt)
 		Pitch(GetCamTurnSpeed() * dt);
 	}
 	*/
-
 #pragma endregion
+
+
 }

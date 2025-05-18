@@ -8,12 +8,7 @@
 #include "Audio.h"
 #include "Camera.h"
 #include "Display.h" 
-#include "GameObject.h"
-#include "Shader.h"
-#include "Mesh.h"
-#include "Texture.h"
-#include "transform.h"
-
+#include "CharacterList.h"
 
 enum class GameState{PLAY, EXIT};
 
@@ -38,16 +33,19 @@ private:
 	void InitGameObjects();
 	void UpdateAllGameObjects();
 	void UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod, bool useIndices);
+	
 
 	//void playAudio(unsigned int Source, glm::vec3 pos);
 
 	Display _gameDisplay;
 	GameState _gameState;
-	Camera cam;
+	Player player;
+	//Camera cam;
 	
 	Mesh monkeyMesh;
 	Mesh ballMesh;
 	Mesh planeMesh;
+	Mesh capsuleMesh;
 
 	Shader fogShader;
 	Shader toonShader;
@@ -56,12 +54,16 @@ private:
 	Texture waterTexture;
 	Texture brickWallTexture;
 	Texture brickGroundTexture;
+	Texture redDustTexture;
 	
 	//Audio audioDevice;
 
 	GameObject monkey;
 	GameObject ball;
 	GameObject plane;
+
+	Character enemyRed;
+	Character enemyYellow;
 
 	float counter;
 	std::chrono::high_resolution_clock::time_point lastFrameTime;

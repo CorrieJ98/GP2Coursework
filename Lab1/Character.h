@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 
-class Character : GameObject{
+class Character : public GameObject{
 public:
 	Character() : m_moveable(true), m_health(1), m_damage(1), m_moveSpeed(5.0f) {};
 	Character(bool moveable, int health, int damage, float moveSpeed, bool state)
@@ -24,11 +24,10 @@ public:
 	void SetDamage(int damage) { this->m_damage = damage; }
 	void SetMoveSpeed(float moveSpeed) { this->m_moveSpeed = moveSpeed; }
 
-private:
-
 	void ToggleMoveable() { this->m_moveable = !this->m_moveable; }
 	void Die() { this->state = false; this->m_moveable = false;  this->transform.SetPos(glm::vec3(-10, -10, -10)); };
-	
+
+private:
 	std::string m_characterName;
 	glm::vec3 m_centreMass;
 	glm::vec3 m_attackOrigin;
