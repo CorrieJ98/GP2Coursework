@@ -160,7 +160,11 @@ void MainGame::InitGameObjects()
 	monkey.init(monkeyMesh, fogShader, waterTexture, true);
 	ball.init(ballMesh, fogShader, brickWallTexture, true);
 	plane.init(planeMesh, fogShader, brickGroundTexture, true);
+	//fireball.init(ballMesh, fogShader, waterTexture, false);
+	//fireball.transform.SetScale(glm::vec3(0.25));
 	casterNPC.init(capsuleMesh, fogShader, redDustTexture, true);
+	//casterNPC.SetProjectile(fireball);
+	casterNPC.SetPatrolPoints(glm::vec3(10, 0, 0), glm::vec3(-3, 0, 5));
 }
 
 void MainGame::UpdateAllGameObjects()
@@ -172,12 +176,14 @@ void MainGame::UpdateAllGameObjects()
 	// shaders
 
 	// casterNPC
+	casterNPC.UpdateDT(deltaTime);
 	UpdateGameObject(casterNPC,
-		glm::vec3(10, 10, 10),
-		glm::vec3(0, 0, 0),
-		glm::vec3(1, 1, 1),
+		casterNPC.transform.GetPos(),
+		casterNPC.transform.GetRot(),
+		casterNPC.transform.GetScale(),
 		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
 		true);
+
 
 	// monkey
 	UpdateGameObject(monkey,
@@ -195,6 +201,13 @@ void MainGame::UpdateAllGameObjects()
 		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
 		false);
 
+	UpdateGameObject(fireball,
+		fireball.transform.GetPos(),
+		fireball.transform.GetRot(),
+		fireball.transform.GetScale(),
+		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
+		true);
+
 	// ground plane
 	UpdateGameObject(plane,
 		glm::vec3(0, -15.1f, 0),
@@ -208,6 +221,8 @@ void MainGame::UpdateAllGameObjects()
 
 void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod, bool altDrawingMethod)
 {
+	// TODO remove transform manipulation and modify gameObjects
+	// from their built-in Update() method.
 
 	gO.transform.SetPos(position);
 	gO.transform.SetRot(rotation);

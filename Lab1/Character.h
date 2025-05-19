@@ -34,9 +34,20 @@ public:
 	void SetAttackOrigin(glm::vec3 attackOrigin) { this->m_attackOrigin = attackOrigin; }
 	void SetCoM(glm::vec3 centreMass) { this->m_centreMass = centreMass; }
 	void SetName(std::string characterName) { this->m_characterName = characterName; }
+	void SetMoveable(bool moveable) { this->m_moveable = moveable; }
 
-	void ToggleMoveable() { this->m_moveable = !this->m_moveable; }
 	void Die() { this->state = false; this->m_moveable = false;  this->transform.SetPos(glm::vec3(-10, -10, -10)); };
+
+	virtual void InitCharacter(bool moveable, int health, int damage, float moveSpeed, bool state, Projectile projectile, std::string name) {
+		this->m_moveable = moveable;
+		this->m_health = health;
+		this->m_damage = damage;
+		this->m_moveSpeed = moveSpeed;
+		this->state = state;
+		this->m_characterName = name;
+		this->m_projectile = projectile;
+		this->m_projectile.state = false;
+	}
 
 private:
 	std::string m_characterName;

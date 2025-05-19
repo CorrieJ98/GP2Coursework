@@ -61,7 +61,7 @@ public:
 	virtual void Update() { std::cout << "ERROR: Update() called from base" << std::endl; }
 	virtual void UpdateDT(float dt) { std::cout << "ERROR: Update(float dt) called from base" << std::endl; }
 
-	void ToggleState() { this->state = !this->state; }
+	void SetState(bool _state) { this->state = _state; }
 
 	glm::vec3 GetDirectionTowards(glm::vec3& from, glm::vec3& to) {
 		glm::vec3 delta = to - from;
