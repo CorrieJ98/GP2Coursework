@@ -5,8 +5,9 @@
 class Player : public Camera, public Character {
 public:
 	void Update(float dt);
+	void ParseInputs(float dt);
+	void SyncTransformWithCam();
 
 private:
-	void SyncTransformWithCam();
-	void ParseInputs(float dt);
+
 };

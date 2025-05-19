@@ -160,7 +160,7 @@ void MainGame::InitGameObjects()
 	monkey.init(monkeyMesh, fogShader, waterTexture, true);
 	ball.init(ballMesh, fogShader, brickWallTexture, true);
 	plane.init(planeMesh, fogShader, brickGroundTexture, true);
-	enemyRed.init(capsuleMesh, fogShader, redDustTexture, true);
+	casterNPC.init(capsuleMesh, fogShader, redDustTexture, true);
 }
 
 void MainGame::UpdateAllGameObjects()
@@ -171,8 +171,8 @@ void MainGame::UpdateAllGameObjects()
 	// GameObject scale
 	// shaders
 
-	// enemyRed
-	UpdateGameObject(enemyRed,
+	// casterNPC
+	UpdateGameObject(casterNPC,
 		glm::vec3(10, 10, 10),
 		glm::vec3(0, 0, 0),
 		glm::vec3(1, 1, 1),
@@ -203,6 +203,7 @@ void MainGame::UpdateAllGameObjects()
 		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
 		false);
 
+	
 }
 
 void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod, bool altDrawingMethod)

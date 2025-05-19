@@ -49,19 +49,35 @@ public:
 		this->state = _state;
 	}
 
+	// Note: I tried overloading but VS really wasn't a fan.
+	// as far as I am aware this is a totally legal operation,
+	// although I am not experienced enough to argue with the
+	// debugger or the compiler.
+	/*
 	virtual void Update() { std::cout << "ERROR: Update() called from base" << std::endl; }
+	virtual void Update(float dt) { std::cout << "ERROR: Update(float dt) called from base" << std::endl; }
+	*/
+
+	virtual void Update() { std::cout << "ERROR: Update() called from base" << std::endl; }
+	virtual void UpdateDT(float dt) { std::cout << "ERROR: Update(float dt) called from base" << std::endl; }
 
 	void ToggleState() { this->state = !this->state; }
 
-	glm::vec3 GetDirectionTowards(GameObject& from, GameObject& to) {
-		return to.transform.GetPos() - from.transform.GetPos();
+	glm::vec3 GetDirectionTowards(glm::vec3& from, glm::vec3& to) {
+		glm::vec3 delta = to - from;
+		if (glm::length(delta) < 0.0001f) // avoid division by zero
+			return glm::vec3(0.0f);
+		return glm::normalize(delta);	// direction return a unit vector of length 1
 	}
+
+	void MoveTo(glm::vec3 point, float moveSpeed, float dt);
 
 	Transform transform;
 	Mesh mesh;
 	Shader shader;
 	Texture texture;
 	Layer layer;
+	float radius;
 	bool state;
 };
 

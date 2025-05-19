@@ -50,7 +50,7 @@ void Player::ParseInputs(float dt)
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 		YawFixed(GetCamTurnSpeed() * dt);
 	}
-
+	
 
 	// TODO pitch modifies the Yaw axis, meaning the camera X axis can Roll
 	// off of the horizon...not sure how to fix this at all, disabling Pitch for now.

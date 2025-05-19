@@ -62,8 +62,7 @@ private:
 	GameObject ball;
 	GameObject plane;
 
-	Character enemyRed;
-	Character enemyYellow;
+	Character casterNPC;
 
 	float counter;
 	std::chrono::high_resolution_clock::time_point lastFrameTime;
