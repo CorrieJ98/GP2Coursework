@@ -6,6 +6,7 @@
 #include "transform.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "AABB.h"
 
 struct Layer {
 	Layer()
@@ -77,6 +78,7 @@ public:
 	Shader shader;
 	Texture texture;
 	Layer layer;
+	AABB aabb;
 	float radius;
 	bool state;
 };

@@ -41,20 +41,20 @@ void Camera::Update(float dt)
 	}
 
 
-	// TODO pitch modifies the Yaw axis, meaning the camera X axis can Roll
-	// off of the horizon...not sure how to fix this at all, disabling Pitch for now.
+	 //TODO pitch modifies the Yaw axis, meaning the camera X axis can Roll
+	 //off of the horizon...not sure how to fix this at all, disabling Pitch for now.
 
-	/*
-	// Up Arrow
+
+	 //Up Arrow
 	if (GetAsyncKeyState(VK_UP) & 0x8000) {
 		Pitch(-GetCamTurnSpeed() * dt);
 	}
 
-	// Down Arrow
+	 //Down Arrow
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
 		Pitch(GetCamTurnSpeed() * dt);
 	}
-	*/
+	
 
 #pragma endregion
 }

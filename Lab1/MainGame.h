@@ -28,6 +28,7 @@ private:
 	void linkFogShader(GameObject& gameObject);
 	void linkToonShader(GameObject& gameObject);
 	void linkRimShader(GameObject& gameObject);
+	void linkExplosionShader(GameObject& gameObject);
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
 	void UpdateDeltaTime();
 	void InitGameObjects();

@@ -11,7 +11,7 @@ public:
 	{
 		this->m_moveSpeed = 5.0f;
 		this->m_turnSpeed = 1.0f;
-		this->m_pitchEnabled = false;
+		this->m_pitchEnabled = true;
 	}
 
 	void Update(float dt);

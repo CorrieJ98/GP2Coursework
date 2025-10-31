@@ -127,6 +127,13 @@ void MainGame::linkRimShader(GameObject& gameObject)
 
 }
 
+void MainGame::linkExplosionShader(GameObject& gameObject) 
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+}
 
 // TODO not displaying this shader
 void MainGame::linkFogShader(GameObject& gameObject)
@@ -201,6 +208,7 @@ void MainGame::UpdateAllGameObjects()
 		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
 		false);
 
+	// fireball
 	UpdateGameObject(fireball,
 		fireball.transform.GetPos(),
 		fireball.transform.GetRot(),

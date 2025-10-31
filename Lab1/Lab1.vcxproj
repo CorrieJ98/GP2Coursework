@@ -88,6 +88,7 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="CasterNPC.h" />
     <ClInclude Include="Camera.h" />

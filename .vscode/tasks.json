@@ -1,0 +1,42 @@
+// {
+//     "version": "2.0.0",
+//     "tasks": [      
+//       {
+//         "label": "build cpp",
+//         "type": "shell",
+//         "command": "g++",
+//         "args": [
+//           "${fileBasename}",
+//           "-o",
+//           "${fileWorkspaceFolderBasename}.exe"
+//         ],
+//         "group": {
+//           "kind": "build",
+//           "isDefault": true
+//         },
+//         "problemMatcher": ["$gcc"],
+//         "detail": "Build C++ file using g++"
+//       }
+//     ]
+//   }
+  
+{
+  "version": "2.0.0",
+  "tasks": [      
+    {
+      "label": "build cpp",
+      "type": "shell",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "if not exist build mkdir build && g++ ${fileBasename} -o build\\${fileWorkspaceFolderBasename}.exe"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"],
+      "detail": "Create build directory and compile C++ file"
+    }
+  ]
+}
