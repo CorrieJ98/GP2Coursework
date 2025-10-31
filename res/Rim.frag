@@ -1,4 +1,5 @@
-#version 400
+#version 430
+
 
 in vec3 normal;          // Normal in view space (from vertex shader)
 in vec3 viewDirection;   // View direction in view space (from vertex shader)

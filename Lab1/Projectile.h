@@ -5,6 +5,7 @@ class Projectile : public GameObject {
 public:
     Projectile() : velocity(glm::vec3(0.0f)), lifetime(10.0f), aliveTime(0.0f), damage(1), speed(3.0f) {}
 
+	// this is never being called from Fireball, so the projectile never updates its position or lifespan
     void UpdateDT(float dt) override {
         if (!state) 
             return;
@@ -19,6 +20,7 @@ public:
             this->SetState(false);
             aliveTime = 0.0f;
             transform.SetPos(glm::vec3(-666, -666, -666)); // send to purgatory (just move it offscreen)
+			std::cout << "Projectile expired and moved to location (" << transform.GetPos().x << ", " << transform.GetPos().y << ", " << transform.GetPos().z << ")\n";
         }
     }
 

@@ -24,6 +24,7 @@ private:
     void CastFireball(glm::vec3 targetPos);
     void CooldownLoop(float dt);
 
+    Projectile fireball;
     bool canShoot;
     float abilityCooldown;
     float currentCooldown;

@@ -131,8 +131,6 @@ void MainGame::linkExplosionShader(GameObject& gameObject)
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
 }
 
 // TODO not displaying this shader
@@ -170,7 +168,7 @@ void MainGame::InitGameObjects()
 	//fireball.init(ballMesh, fogShader, waterTexture, false);
 	//fireball.transform.SetScale(glm::vec3(0.25));
 	casterNPC.init(capsuleMesh, fogShader, redDustTexture, true);
-	//casterNPC.SetProjectile(fireball);
+	casterNPC.SetProjectile(fireball);
 	casterNPC.SetPatrolPoints(glm::vec3(10, 0, 0), glm::vec3(-3, 0, 5));
 }
 
@@ -213,7 +211,7 @@ void MainGame::UpdateAllGameObjects()
 		fireball.transform.GetPos(),
 		fireball.transform.GetRot(),
 		fireball.transform.GetScale(),
-		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
+		std::bind(&MainGame::linkExplosionShader, this, std::placeholders::_1),
 		true);
 
 	// ground plane
@@ -229,7 +227,7 @@ void MainGame::UpdateAllGameObjects()
 
 void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod, bool altDrawingMethod)
 {
-	// TODO remove transform manipulation and modify gameObjects
+	// TODO remove pos, rot and scale and send Transform&
 	// from their built-in Update() method.
 
 	gO.transform.SetPos(position);
@@ -251,6 +249,8 @@ void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 ro
 		}
 	}
 }
+
+
 
 void MainGame::DrawGame()
 {
