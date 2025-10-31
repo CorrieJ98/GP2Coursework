@@ -2,6 +2,7 @@
 #include <vector>
 #include "Projectile.h"
 #include "GameObject.h"
+#include "AABB.h"
 
 
 class Character : public GameObject{
@@ -47,6 +48,7 @@ public:
 		this->m_characterName = name;
 		this->m_projectile = projectile;
 		this->m_projectile.state = false;
+		this->m_aabb.init(glm::vec2(0.5f * ROOT2, 0.5f * ROOT2), glm::vec2(-0.5f * ROOT2, -0.5f * ROOT2), this->transform);
 	}
 
 private:
@@ -58,6 +60,7 @@ private:
 	int m_damage;
 	bool m_moveable;
 	float m_moveSpeed;
+	AABB m_aabb;
 
 
 };
