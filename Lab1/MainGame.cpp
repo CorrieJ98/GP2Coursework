@@ -134,6 +134,7 @@ void MainGame::linkExplosionShader(GameObject& gameObject)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	explosionShader.Bind();
 	explosionShader.setMat4("transform", gameObject.transform.GetModel());
+	explosionShader.setFloat("time", counter);
 }
 
 // TODO not displaying this shader
