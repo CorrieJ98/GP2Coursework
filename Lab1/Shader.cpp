@@ -30,6 +30,31 @@ void Shader::init(const std::string& vertFile, const std::string& fragFile)
 }
 
 
+void Shader::init(const std::string& vertFile, const std::string& fragFile, const std::string& geomFile)
+{
+	shaderID = glCreateProgram(); // create shader program (openGL saves as ref number)
+	shaders[0] = CreateShader(LoadShader(vertFile), GL_VERTEX_SHADER); // create vertex shader
+	shaders[1] = CreateShader(LoadShader(geomFile), GL_GEOMETRY_SHADER); // create fragment shader
+	shaders[2] = CreateShader(LoadShader(fragFile), GL_FRAGMENT_SHADER); // create fragment shader
+
+	for (unsigned int i = 0; i < 3; i++)
+	{
+		glAttachShader(shaderID, shaders[i]); //add all our shaders to the shader program "shaders" 
+	}
+
+	glBindAttribLocation(shaderID, 0, "VertexPosition"); // associate attribute variable with our shader program attribute (in this case attribute vec3 position;)
+	glBindAttribLocation(shaderID, 1, "VertexTexCoord");
+	glBindAttribLocation(shaderID, 2, "VertexNormal");
+
+	glLinkProgram(shaderID); //create executables that will run on the GPU shaders
+	CheckShaderError(shaderID, GL_LINK_STATUS, true, "Error: Shader program linking failed"); // cheack for error
+
+	glValidateProgram(shaderID); //check the entire program is valid
+	CheckShaderError(shaderID, GL_VALIDATE_STATUS, true, "Error: Shader program not valid");
+
+	uniforms[TRANSFORM_U] = glGetUniformLocation(shaderID, "transform"); // associate with the location of uniform variable within a program
+}
+
 
 
 Shader::~Shader()

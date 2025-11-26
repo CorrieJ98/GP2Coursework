@@ -108,6 +108,9 @@
     <ClInclude Include="transform.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\res\explosion.frag" />
+    <None Include="..\res\explosion.geom" />
+    <None Include="..\res\explosion.vert" />
     <None Include="..\res\fogShader.frag" />
     <None Include="..\res\fogShader.vert" />
     <None Include="..\res\Rim.frag" />

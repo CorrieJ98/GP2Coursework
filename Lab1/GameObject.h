@@ -68,7 +68,7 @@ public:
 		glm::vec3 delta = to - from;
 		if (glm::length(delta) < 0.0001f) // avoid division by zero
 			return glm::vec3(0.0f);
-		return glm::normalize(delta);	// direction return a unit vector of length 1
+		return glm::normalize(delta);	// direction; return a unit vector of length 1
 	}
 
 	void MoveTo(glm::vec3 point, float moveSpeed, float dt);

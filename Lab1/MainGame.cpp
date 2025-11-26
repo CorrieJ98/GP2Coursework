@@ -30,6 +30,7 @@ void MainGame::InitSystems()
 	capsuleMesh.loadModel("..\\res\\capsule.obj");
 	fogShader.init("..\\res\\fogShader.vert", "..\\res\\fogShader.frag"); //new shader
 	toonShader.init("..\\res\\shaderToon.vert", "..\\res\\shaderToon.frag"); //new shader
+	explosionShader.init("..\\res\\explosion.vert", "..\\res\\explosion.frag", "..\\res\\explosion.geom");
 	rimShader.init("..\\res\\Rim.vert", "..\\res\\Rim.frag");
 	waterTexture.load("..\\res\\water.jpg"); //load texture
 	brickWallTexture.load("..\\res\\brickwall.jpg");
@@ -131,11 +132,14 @@ void MainGame::linkExplosionShader(GameObject& gameObject)
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	explosionShader.Bind();
+	explosionShader.setMat4("transform", gameObject.transform.GetModel());
 }
 
 // TODO not displaying this shader
 void MainGame::linkFogShader(GameObject& gameObject)
 {
+	fogShader.Bind();
 	fogShader.setMat4("transform", gameObject.transform.GetModel());
 }
 
@@ -162,7 +166,7 @@ void MainGame::UpdateDeltaTime()
 
 void MainGame::InitGameObjects()
 {
-	monkey.init(monkeyMesh, fogShader, waterTexture, true);
+	monkey.init(monkeyMesh, explosionShader, waterTexture, true);
 	ball.init(ballMesh, fogShader, brickWallTexture, true);
 	plane.init(planeMesh, fogShader, brickGroundTexture, true);
 	//fireball.init(ballMesh, fogShader, waterTexture, false);
@@ -177,7 +181,7 @@ void MainGame::UpdateAllGameObjects()
 	// GameObject
 	// positional modifiers
 	// rotational modifiers
-	// GameObject scale
+	// GameObject in_scale
 	// shaders
 
 	// casterNPC
@@ -195,7 +199,7 @@ void MainGame::UpdateAllGameObjects()
 		glm::vec3(sin(counter += deltaTime), 0, 0),
 		glm::vec3(0, counter * 0.5f, 0),
 		glm::vec3(1, 1, 1),
-		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
+		std::bind(&MainGame::linkExplosionShader, this, std::placeholders::_1),
 		false);
 
 	// ball
@@ -225,14 +229,14 @@ void MainGame::UpdateAllGameObjects()
 	
 }
 
-void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod, bool altDrawingMethod)
+void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 in_pos, glm::vec3 in_rot, glm::vec3 in_scale, std::function<void(GameObject&)> linkerMethod, bool altDrawingMethod)
 {
-	// TODO remove pos, rot and scale and send Transform&
+	// TODO remove pos, rot and in_scale and send Transform&
 	// from their built-in Update() method.
 
-	gO.transform.SetPos(position);
-	gO.transform.SetRot(rotation);
-	gO.transform.SetScale(scale);
+	gO.transform.SetPos(in_pos);
+	gO.transform.SetRot(in_rot);
+	gO.transform.SetScale(in_scale);
 
 	if (gO.state)
 	{

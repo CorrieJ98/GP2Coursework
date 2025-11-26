@@ -139,6 +139,15 @@
     <None Include="bricks.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\res\explosion.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\explosion.geom">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\explosion.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\monkey3.obj">
