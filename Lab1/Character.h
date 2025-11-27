@@ -48,7 +48,7 @@ public:
 		this->m_characterName = name;
 		this->m_projectile = projectile;
 		this->m_projectile.state = false;
-		this->m_aabb.init(glm::vec2(0.5f * ROOT2, 0.5f * ROOT2), glm::vec2(-0.5f * ROOT2, -0.5f * ROOT2), this->transform);
+		this->m_aabb.init(this->transform, 1.0f); // default radius
 	}
 
 private:

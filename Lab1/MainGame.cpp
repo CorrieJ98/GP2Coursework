@@ -36,12 +36,14 @@ void MainGame::InitSystems()
 	brickWallTexture.load("..\\res\\brickwall.jpg");
 	brickGroundTexture.load("..\\res\\bricks.jpg");
 	redDustTexture.load("..\\res\\redDust.jpg");
+	envMapping.init("..\\res\\envMapping.vert", "..\\res\\envMapping.frag");
 
 	player.initCamera(player.transform.GetPos(), 70.0f, (float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 1000.0f, 4.0f, 1.5f, false);
 
 	InitGameObjects();
 
-	counter = 1.0f;
+
+	//counter = 1.0f;
 }
 
 void MainGame::GameLoop()
@@ -49,7 +51,8 @@ void MainGame::GameLoop()
 	while (_gameState != GameState::EXIT)
 	{
 
-		UpdateDeltaTime();
+		//UpdateDeltaTime();
+		gt.Update();
 		ProcessInput();
 		UpdateAllGameObjects();
 		DrawGame();
@@ -62,7 +65,7 @@ void MainGame::GameLoop()
 void MainGame::ProcessInput()
 {
 	SDL_Event evnt;
-	player.Update(deltaTime);
+	player.Update(gt.GetDeltaTime());
 
 	while (SDL_PollEvent(&evnt)) //get and process events
 	{
@@ -134,7 +137,16 @@ void MainGame::linkExplosionShader(GameObject& gameObject)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	explosionShader.Bind();
 	explosionShader.setMat4("transform", gameObject.transform.GetModel());
-	explosionShader.setFloat("time", counter);
+	explosionShader.setFloat("time", gt.GetDeltaTime());
+}
+
+void MainGame::linkEnvMappingShader(GameObject& gameObject)
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	envMapping.Bind();
+	envMapping.setMat4("transform", gameObject.transform.GetMVP(player));
+	envMapping.setMat4("model", gameObject.transform.GetModel());
 }
 
 // TODO not displaying this shader
@@ -150,19 +162,6 @@ void MainGame::linkToonShader(GameObject& gameObject)
 	toonShader.setMat4("transform", gameObject.transform.GetMVP(player));
 	toonShader.setVec3("lightDir", glm::normalize(glm::vec3(0.0f)));
 	toonShader.setVec3("lightDir", glm::cross(-player.GetForwardVec(), player.getPos()));
-}
-
-
-void MainGame::UpdateDeltaTime()
-{
-	// potentially quite error prone and messy, but it seems to work for now.
-	// 1. get the current time
-	// 2. get period of time between current and last frames
-	// 3. and then update the last frame time for the next cycle
-
-	std::chrono::steady_clock::time_point currentFrameTime = std::chrono::high_resolution_clock::now();
-	deltaTime = std::chrono::duration<float, std::chrono::seconds::period>(currentFrameTime - lastFrameTime).count();
-	lastFrameTime = currentFrameTime;
 }
 
 void MainGame::InitGameObjects()
@@ -186,7 +185,7 @@ void MainGame::UpdateAllGameObjects()
 	// shaders
 
 	// casterNPC
-	casterNPC.UpdateDT(deltaTime);
+	casterNPC.UpdateDT(gt.GetDeltaTime());
 	UpdateGameObject(casterNPC,
 		casterNPC.transform.GetPos(),
 		casterNPC.transform.GetRot(),
@@ -197,16 +196,16 @@ void MainGame::UpdateAllGameObjects()
 
 	// monkey
 	UpdateGameObject(monkey,
-		glm::vec3(sin(counter += deltaTime), 0, 0),
-		glm::vec3(0, counter * 0.5f, 0),
+		glm::vec3(sin(1 + gt.GetDeltaTime()), 0, 0),
+		glm::vec3(0, gt.GetDeltaTime() * 0.5f, 0),
 		glm::vec3(1, 1, 1),
 		std::bind(&MainGame::linkExplosionShader, this, std::placeholders::_1),
 		false);
 
 	// ball
 	UpdateGameObject(ball,
-		glm::vec3(10, cos(counter += deltaTime), -2),
-		glm::vec3(0, 0, -counter * 0.5f),
+		glm::vec3(10, cos(1 + gt.GetDeltaTime()), -2),
+		glm::vec3(0, 0, -gt.GetDeltaTime() * 0.5f),
 		glm::vec3(1, 1, 1),
 		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
 		false);
@@ -262,7 +261,6 @@ void MainGame::DrawGame()
 	_gameDisplay.clearDisplay(0.35f, 0.4f, 0.5f, 0.5f); //sets our background colour
 
 	UpdateAllGameObjects();
-	counter += deltaTime;
 
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnd();

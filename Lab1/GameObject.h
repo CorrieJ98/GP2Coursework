@@ -31,6 +31,8 @@ class GameObject {
 public:
 	GameObject() : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(1,1,0), state(false){}
 
+	GameObject(const GameObject& other) : transform(other.transform), mesh(other.mesh), shader(other.shader), texture(other.texture), layer(other.layer), aabb(other.aabb), radius(other.radius), state(other.state) {}
+
 	GameObject(Mesh& _mesh, Shader& _shader, Texture& _texture) : transform(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)), layer(0, 0, 0), state(false) {
 		this->mesh = _mesh;
 		this->shader = _shader;

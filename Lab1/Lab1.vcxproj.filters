@@ -113,6 +113,9 @@
     <ClInclude Include="AABB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\fogShader.frag">
@@ -148,6 +151,8 @@
     <None Include="..\res\explosion.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="envMapping.frag" />
+    <None Include="envMapping.vert" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\monkey3.obj">

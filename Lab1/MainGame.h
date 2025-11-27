@@ -4,11 +4,12 @@
 #include <functional>
 #include <SDL\SDL.h>
 #include <GL/glew.h>
-#include <chrono>
 #include "Audio.h"
 #include "Camera.h"
 #include "Display.h" 
 #include "CharacterList.h"
+#include "GameTime.h"
+
 
 enum class GameState{PLAY, EXIT};
 
@@ -30,10 +31,10 @@ private:
 	void linkToonShader(GameObject& gameObject);
 	void linkRimShader(GameObject& gameObject);
 	void linkExplosionShader(GameObject& gameObject);
-	
+	void linkEnvMappingShader(GameObject& gameObject);
 
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
-	void UpdateDeltaTime();
+	//void UpdateDeltaTime();
 	void InitGameObjects();
 	void UpdateAllGameObjects();
 	void UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod, bool useIndices);
@@ -55,6 +56,7 @@ private:
 	Shader toonShader;
 	Shader rimShader;
 	Shader explosionShader;
+	Shader envMapping;
 
 	Texture waterTexture;
 	Texture brickWallTexture;
@@ -71,9 +73,7 @@ private:
 
 	CasterNPC casterNPC;
 
-	float counter;
-	std::chrono::high_resolution_clock::time_point lastFrameTime;
-	float deltaTime;
+	GameTime gt;
 
 	unsigned int whistle;
 	unsigned int backGroundMusic;
