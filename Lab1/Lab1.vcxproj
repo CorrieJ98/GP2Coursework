@@ -95,7 +95,6 @@
     <ClInclude Include="CharacterList.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameTime.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="obj_loader.h" />
@@ -120,8 +119,6 @@
     <None Include="..\res\shaderToon.vert" />
     <None Include="bricks.frag" />
     <None Include="bricks.vert" />
-    <None Include="envMapping.frag" />
-    <None Include="envMapping.vert" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\monkey3.obj">
