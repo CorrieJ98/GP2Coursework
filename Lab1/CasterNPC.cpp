@@ -10,11 +10,11 @@ void CasterNPC::UpdateDT(float dt)
 	//std::cout << "abilityCD: " << abilityCooldown << std::endl;
 
 	// attack condition
-	if (canShoot) {
-		CastFireball(glm::vec3(0,0,0));	// send the fireball to the origin for now
-		canShoot = false;
-		CooldownLoop(dt);
-	}
+	//if (canShoot) {
+	//	CastFireball(glm::vec3(0,0,0));	// send the fireball to the origin for now
+	//	canShoot = false;
+	//	CooldownLoop(dt);
+	//}
 }
 
 

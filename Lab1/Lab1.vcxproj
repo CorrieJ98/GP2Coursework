@@ -14,7 +14,7 @@
     <ProjectGuid>{D246FDDF-B30E-4F14-80F8-095FA4E04ECF}</ProjectGuid>
     <RootNamespace>Lab1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Lab1</ProjectName>
+    <ProjectName>Personal</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -84,6 +84,7 @@
     <ClCompile Include="obj_loader.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="stb_image.c" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
@@ -103,11 +104,16 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="transform.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\Users\corri\Downloads\GP - Lab 4-Partial Solution(1)\GP - Lab 4-Partial Solution\res\shaderSkybox.frag" />
+    <None Include="..\..\..\..\Users\corri\Downloads\GP - Lab 4-Partial Solution(1)\GP - Lab 4-Partial Solution\res\shaderSkybox.vert" />
+    <None Include="..\res\envMapping.frag" />
+    <None Include="..\res\envMapping.vert" />
     <None Include="..\res\explosion.frag" />
     <None Include="..\res\explosion.geom" />
     <None Include="..\res\explosion.vert" />

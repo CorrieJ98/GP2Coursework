@@ -6,9 +6,9 @@ layout (triangles) in;
 layout (triangle_strip, max_vertices = 3) out;
 
 //Passing in texture coordinates
-
-vec2 texCoords;
-
+in VS_OUT {
+    vec2 texCoords;
+} gs_in[];
 
 //Passing out texture coordinates
 out vec2 TexCoords; 
@@ -42,13 +42,13 @@ void main()
     vec3 normal = GetNormal();
 //Setting current vertex position
     gl_Position = explode(gl_in[0].gl_Position, normal);
-    TexCoords = texCoords;
+    TexCoords = gs_in[0].texCoords;
     EmitVertex();
     gl_Position = explode(gl_in[1].gl_Position, normal);
-    TexCoords = texCoords;
+    TexCoords = gs_in[1].texCoords;
     EmitVertex();
     gl_Position = explode(gl_in[2].gl_Position, normal);
-    TexCoords = texCoords;
+    TexCoords = gs_in[2].texCoords;
     EmitVertex();
     EndPrimitive();
 }  

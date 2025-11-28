@@ -9,8 +9,14 @@
 #include "Camera.h"
 #include "Display.h" 
 #include "CharacterList.h"
+#include "SkyBox.h"
 
 enum class GameState{PLAY, EXIT};
+
+constexpr float PI = 3.14159265358979323846f;
+constexpr float TWO_PI = 6.28318530717958647692f;
+constexpr float PI_2 = 1.57079632679489661923f;
+constexpr float SUN_DISTANCE = 100.0f;
 
 class MainGame
 {
@@ -30,6 +36,8 @@ private:
 	void linkToonShader(GameObject& gameObject);
 	void linkRimShader(GameObject& gameObject);
 	void linkExplosionShader(GameObject& gameObject);
+	void linkSunShader(GameObject& gameObject);
+	void linkEmapping(GameObject& gameObject);
 	
 
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
@@ -55,11 +63,15 @@ private:
 	Shader toonShader;
 	Shader rimShader;
 	Shader explosionShader;
+	Shader sunShader;
+	Shader eMapping;
 
 	Texture waterTexture;
 	Texture brickWallTexture;
 	Texture brickGroundTexture;
 	Texture redDustTexture;
+
+    Skybox skybox;
 	
 	//Audio audioDevice;
 

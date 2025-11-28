@@ -32,12 +32,24 @@ void MainGame::InitSystems()
 	toonShader.init("..\\res\\shaderToon.vert", "..\\res\\shaderToon.frag"); //new shader
 	explosionShader.init("..\\res\\explosion.vert", "..\\res\\explosion.frag", "..\\res\\explosion.geom");
 	rimShader.init("..\\res\\Rim.vert", "..\\res\\Rim.frag");
+	sunShader.init("..\\res\\sunShader.vert", "..\\res\\sunShader.frag");
+	eMapping.init("..\\res\\envMapping.vert", "..\\res\\envMapping.frag");
+
 	waterTexture.load("..\\res\\water.jpg"); //load texture
 	brickWallTexture.load("..\\res\\brickwall.jpg");
 	brickGroundTexture.load("..\\res\\bricks.jpg");
 	redDustTexture.load("..\\res\\redDust.jpg");
+	
+    skybox.init(std::vector<std::string>{
+        "..\\res\\skybox\\right.jpg",
+            "..\\res\\skybox\\left.jpg",
+            "..\\res\\skybox\\top.jpg",
+            "..\\res\\skybox\\bottom.jpg",
+            "..\\res\\skybox\\front.jpg",
+            "..\\res\\skybox\\back.jpg"
+    });
 
-	player.initCamera(player.transform.GetPos(), 70.0f, (float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 1000.0f, 4.0f, 1.5f, false);
+	player.initCamera(player.transform.GetPos(), 70.0f, (float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 2000.0f, 4.0f, 1.5f, false);
 
 	InitGameObjects();
 
@@ -124,8 +136,6 @@ void MainGame::linkRimShader(GameObject& gameObject)
 	/*transform.SetPos(glm::vec3(1.0, 0.0, 0.0));
 	transform.SetRot(glm::vec3(0.0, counter * 0.5, 0.0));
 	transform.SetScale(glm::vec3(1.0, 1.0, 1.0));*/
-
-
 }
 
 void MainGame::linkExplosionShader(GameObject& gameObject) 
@@ -137,6 +147,11 @@ void MainGame::linkExplosionShader(GameObject& gameObject)
 	explosionShader.setFloat("time", counter);
 }
 
+void MainGame::linkSunShader(GameObject& gameObject)
+{
+	sunShader.Bind();
+}
+
 // TODO not displaying this shader
 void MainGame::linkFogShader(GameObject& gameObject)
 {
@@ -146,12 +161,24 @@ void MainGame::linkFogShader(GameObject& gameObject)
 
 void MainGame::linkToonShader(GameObject& gameObject)
 {
+	toonShader.Bind();
 	toonShader.setMat4("modelMatrix", gameObject.transform.GetModel());
 	toonShader.setMat4("transform", gameObject.transform.GetMVP(player));
 	toonShader.setVec3("lightDir", glm::normalize(glm::vec3(0.0f)));
 	toonShader.setVec3("lightDir", glm::cross(-player.GetForwardVec(), player.getPos()));
 }
 
+void MainGame::linkEmapping(GameObject& gameObject)
+{
+    eMapping.Bind();
+    glBindTextureUnit(0, skybox.GetTextureId());
+    glBindTextureUnit(1, brickGroundTexture.getID());
+	eMapping.setMat4("model", gameObject.transform.GetModel());
+    eMapping.setMat4("view", player.GetViewMatrix());
+    eMapping.setMat4("projection", player.GetProjectionMatrix());
+    eMapping.setVec3("cameraPos", player.getPos());
+    eMapping.setInt("skybox", 0);
+}
 
 void MainGame::UpdateDeltaTime()
 {
@@ -205,9 +232,10 @@ void MainGame::UpdateAllGameObjects()
 
 	// ball
 	UpdateGameObject(ball,
-		glm::vec3(10, cos(counter += deltaTime), -2),
+		//glm::vec3(35, cos(deltaTime + counter),0) * TWO_PI,	// TODO rotate around the origin at an offset
+		glm::vec3(cos(counter + deltaTime/1) * SUN_DISTANCE, sin(counter + deltaTime/ 1) * SUN_DISTANCE/4, sin(counter + deltaTime/ 100.0f) * SUN_DISTANCE),
 		glm::vec3(0, 0, -counter * 0.5f),
-		glm::vec3(1, 1, 1),
+		glm::vec3(3, 3, 3),
 		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
 		false);
 
@@ -221,10 +249,10 @@ void MainGame::UpdateAllGameObjects()
 
 	// ground plane
 	UpdateGameObject(plane,
-		glm::vec3(0, -15.1f, 0),
+		glm::vec3(0, -100.0f, 0),
 		glm::vec3(0, 0, 0),
-		glm::vec3(0.1f),
-		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
+		glm::vec3(1,1,1),
+		std::bind(&MainGame::linkEmapping, this, std::placeholders::_1),
 		false);
 
 	
@@ -261,6 +289,7 @@ void MainGame::DrawGame()
 {
 	_gameDisplay.clearDisplay(0.35f, 0.4f, 0.5f, 0.5f); //sets our background colour
 
+    skybox.draw(&player);
 	UpdateAllGameObjects();
 	counter += deltaTime;
 
