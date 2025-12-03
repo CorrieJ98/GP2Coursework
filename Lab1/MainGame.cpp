@@ -73,8 +73,9 @@ void MainGame::GameLoop()
         deltaTime.CapFrameRate(DESIRED_FPS);
 
         
-        std::printf("\rDT: %.2f ms, Counter: %d\r", deltaTime.GetDT_ms(), counter.ReadCounter());
-        fflush(stdout);
+        std::printf(" Frame Time: %.2f ms, Target FPS: %d, Current FPS: %.2f, Counter: %d \n",deltaTime.GetDT_ms(), DESIRED_FPS, 1000.0f / deltaTime.GetDT_ms(), counter.ReadCounter());
+        //std::printf("\rTarget FPS: %d, Frame Time: %.2f ms, Counter: %d\r",DESIRED_FPS, deltaTime.GetDT_ms(), counter.ReadCounter());
+        //fflush(stdout);
 	}
 }
 
@@ -208,7 +209,7 @@ void MainGame::InitGameObjects()
 	plane.init(planeMesh, fogShader, brickGroundTexture, true);
 	casterNPC.init(capsuleMesh, adsLighting, redDustTexture, true);
 	//casterNPC.SetProjectile(fireball);
-	casterNPC.SetPatrolPoints(glm::vec3(10, 0, 0), glm::vec3(-3, 0, 5));
+	casterNPC.SetPatrolPoints(glm::vec3(10, -2, 5), glm::vec3(-3, -2, 5));
 }
 
 void MainGame::UpdateAllGameObjects(float dt)
@@ -224,9 +225,9 @@ void MainGame::UpdateAllGameObjects(float dt)
 	UpdateGameObject(casterNPC,
 		casterNPC.transform.GetPos(),
 		casterNPC.transform.GetRot(),
-		casterNPC.transform.GetScale(),
+		glm::vec3(1,1,1),
 		std::bind(&MainGame::linkADSLighting, this, std::placeholders::_1),
-		true);
+		false);
 
 	// monkey
 	UpdateGameObject(monkey,
@@ -250,7 +251,7 @@ void MainGame::UpdateAllGameObjects(float dt)
 		fireball.transform.GetRot(),
 		fireball.transform.GetScale(),
 		std::bind(&MainGame::linkExplosionShader, this, std::placeholders::_1),
-		true);
+		false);
 
 	// ground plane
 	UpdateGameObject(plane,
@@ -265,9 +266,7 @@ void MainGame::UpdateAllGameObjects(float dt)
 
 void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 in_pos, glm::vec3 in_rot, glm::vec3 in_scale, std::function<void(GameObject&)> linkerMethod, bool altDrawingMethod)
 {
-	// TODO remove pos, rot and in_scale and send Transform&
-	// from their built-in Update() method.
-
+	
 	gO.transform.SetPos(in_pos);
 	gO.transform.SetRot(in_rot);
 	gO.transform.SetScale(in_scale);
@@ -278,6 +277,7 @@ void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 in_pos, glm::vec3 in_r
 		gO.shader.Bind();
 		linkerMethod(gO);
 		gO.shader.Update(gO.transform, player);
+
 
 		if (altDrawingMethod) {
 			gO.mesh.drawVertexes();

@@ -52,8 +52,7 @@ private:
 
 	Display _gameDisplay;
 	GameState _gameState;
-	Player player;
-	//Camera cam;
+	Player player;  // inherits from Camera
 	
 	Mesh monkeyMesh;
 	Mesh ballMesh;
@@ -75,8 +74,6 @@ private:
 
     Skybox skybox;
 	
-	//Audio audioDevice;
-
 	GameObject monkey;
 	GameObject ball;
 	GameObject plane;

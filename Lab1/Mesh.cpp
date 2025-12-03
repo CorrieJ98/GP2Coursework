@@ -89,6 +89,11 @@ Mesh::Mesh()
 	drawCount = NULL;
 }
 
+Mesh::Mesh(Mesh& other)
+{
+    drawCount = other.drawCount;
+}
+
 void Mesh::loadModel(const std::string& filename)
 {
 	IndexedModel model = OBJModel(filename).ToIndexedModel();
