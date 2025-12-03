@@ -3,7 +3,10 @@
 void Camera::Update(float dt)
 {
 	// TODO currently diagonal movement has the root2 problem
-	// how to normalise velocity??
+
+    if (GetCamMoveSpeed() > m_moveSpeed) {
+        m_moveSpeed *= ONE_ROOT2;
+    }
 
 #pragma region Keybindings
 	// W

@@ -34,6 +34,8 @@ void MainGame::InitSystems()
 	rimShader.init("..\\res\\Rim.vert", "..\\res\\Rim.frag");
 	sunShader.init("..\\res\\sunShader.vert", "..\\res\\sunShader.frag");
 	eMapping.init("..\\res\\envMapping.vert", "..\\res\\envMapping.frag");
+    adsLighting.init("..\\res\\ADS.vert", "..\\res\\ADS.frag");
+
 
 	waterTexture.load("..\\res\\water.jpg"); //load texture
 	brickWallTexture.load("..\\res\\brickwall.jpg");
@@ -180,6 +182,24 @@ void MainGame::linkEmapping(GameObject& gameObject)
     eMapping.setInt("skybox", 0);
 }
 
+void MainGame::linkADSLighting(GameObject& gameObject)
+{
+    adsLighting.Bind();
+
+    adsLighting.setMat4("uModel", gameObject.transform.GetModel());
+    adsLighting.setMat4("uView", player.GetViewMatrix());
+    adsLighting.setMat4("uProjection", player.GetProjectionMatrix());
+
+    adsLighting.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+    adsLighting.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+    adsLighting.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    adsLighting.setFloat("material.shininess", 32.0f);
+    adsLighting.setVec3("light.position", ball.transform.GetPos());
+    adsLighting.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+    adsLighting.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+    adsLighting.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+}
+
 void MainGame::UpdateDeltaTime()
 {
 	// potentially quite error prone and messy, but it seems to work for now.
@@ -197,10 +217,8 @@ void MainGame::InitGameObjects()
 	monkey.init(monkeyMesh, explosionShader, waterTexture, true);
 	ball.init(ballMesh, fogShader, brickWallTexture, true);
 	plane.init(planeMesh, fogShader, brickGroundTexture, true);
-	//fireball.init(ballMesh, fogShader, waterTexture, false);
-	//fireball.transform.SetScale(glm::vec3(0.25));
-	casterNPC.init(capsuleMesh, fogShader, redDustTexture, true);
-	casterNPC.SetProjectile(fireball);
+	casterNPC.init(capsuleMesh, adsLighting, redDustTexture, true);
+	//casterNPC.SetProjectile(fireball);
 	casterNPC.SetPatrolPoints(glm::vec3(10, 0, 0), glm::vec3(-3, 0, 5));
 }
 
@@ -218,9 +236,8 @@ void MainGame::UpdateAllGameObjects()
 		casterNPC.transform.GetPos(),
 		casterNPC.transform.GetRot(),
 		casterNPC.transform.GetScale(),
-		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
+		std::bind(&MainGame::linkADSLighting, this, std::placeholders::_1),
 		true);
-
 
 	// monkey
 	UpdateGameObject(monkey,
@@ -232,7 +249,6 @@ void MainGame::UpdateAllGameObjects()
 
 	// ball
 	UpdateGameObject(ball,
-		//glm::vec3(35, cos(deltaTime + counter),0) * TWO_PI,	// TODO rotate around the origin at an offset
 		glm::vec3(cos(counter + deltaTime/1) * SUN_DISTANCE, sin(counter + deltaTime/ 1) * SUN_DISTANCE/4, sin(counter + deltaTime/ 100.0f) * SUN_DISTANCE),
 		glm::vec3(0, 0, -counter * 0.5f),
 		glm::vec3(3, 3, 3),

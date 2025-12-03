@@ -57,6 +57,9 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h">
@@ -113,6 +116,12 @@
     <ClInclude Include="AABB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\fogShader.frag">
@@ -146,6 +155,19 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\res\explosion.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="notes.md" />
+    <None Include="..\res\envMapping.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\envMapping.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\Users\corri\Downloads\GP - Lab 4-Partial Solution(1)\GP - Lab 4-Partial Solution\res\shaderSkybox.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\Users\corri\Downloads\GP - Lab 4-Partial Solution(1)\GP - Lab 4-Partial Solution\res\shaderSkybox.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

@@ -94,6 +94,7 @@
     <ClInclude Include="CasterNPC.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CharacterList.h" />
+    <ClInclude Include="constants.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="MainGame.h" />
@@ -125,6 +126,7 @@
     <None Include="..\res\shaderToon.vert" />
     <None Include="bricks.frag" />
     <None Include="bricks.vert" />
+    <None Include="notes.md" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\monkey3.obj">

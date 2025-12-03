@@ -2,6 +2,8 @@
 #include <Windows.h>
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include "constants.h"
+
 
 struct Camera
 {

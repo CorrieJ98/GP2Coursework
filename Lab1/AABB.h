@@ -2,8 +2,6 @@
 #include <glm/glm.hpp>
 #include "transform.h"
 
-constexpr auto ROOT2 = 1.41421356237f;
-
 class AABB {
 public:
 
