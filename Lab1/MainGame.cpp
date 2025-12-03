@@ -154,7 +154,6 @@ void MainGame::linkSunShader(GameObject& gameObject)
 	sunShader.Bind();
 }
 
-// TODO not displaying this shader
 void MainGame::linkFogShader(GameObject& gameObject)
 {
 	fogShader.Bind();
