@@ -20,6 +20,7 @@ void MainGame::Run()
 
 void MainGame::InitSystems()
 {
+    deltaTime._deltaTimeFrameStart();
 	_gameDisplay.initDisplay();
 	//whistle = audioDevice.loadSound("..\\res\\bang.wav");
 	//backGroundMusic = audioDevice.loadSound("..\\res\\background.wav");
@@ -55,19 +56,24 @@ void MainGame::InitSystems()
 
 	InitGameObjects();
 
-	counter = 1.0f;
+    counter.ResetCounter();
+    deltaTime._deltaTimeFrameEnd();
 }
 
 void MainGame::GameLoop()
 {
 	while (_gameState != GameState::EXIT)
 	{
-
-		UpdateDeltaTime();
+        counter.IncrementCounter(1);
+        deltaTime._deltaTimeFrameStart();
 		ProcessInput();
 		UpdateAllGameObjects();
 		DrawGame();
+        deltaTime._deltaTimeFrameEnd();
+        deltaTime.CapFrameRate(24);
 
+        std::printf("DT: %.2f ms, Counter: %d\r", deltaTime.GetDT_ms(), counter.ReadCounter());
+        std::printf("\n");
 		//collision(monkeyMesh.getSpherePos(), monkeyMesh.getSphereRadius(), ballMesh.getSpherePos(), ballMesh.getSphereRadius());
 		//playAudio(backGroundMusic, glm::vec3(0.0f,0.0f,0.0f));
 	}
@@ -76,7 +82,7 @@ void MainGame::GameLoop()
 void MainGame::ProcessInput()
 {
 	SDL_Event evnt;
-	player.Update(deltaTime);
+	player.Update(deltaTime.GetDT_ms());
 
 	while (SDL_PollEvent(&evnt)) //get and process events
 	{
@@ -133,11 +139,6 @@ void MainGame::linkRimShader(GameObject& gameObject)
 	rimShader.setFloat("rimPower", 3.0f);
 	rimShader.setVec3("rimColor", glm::vec3(0.8f, 0.0f, 0.0f));
 	rimShader.setVec3("camPos", player.getPos());
-
-
-	/*transform.SetPos(glm::vec3(1.0, 0.0, 0.0));
-	transform.SetRot(glm::vec3(0.0, counter * 0.5, 0.0));
-	transform.SetScale(glm::vec3(1.0, 1.0, 1.0));*/
 }
 
 void MainGame::linkExplosionShader(GameObject& gameObject) 
@@ -146,7 +147,7 @@ void MainGame::linkExplosionShader(GameObject& gameObject)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	explosionShader.Bind();
 	explosionShader.setMat4("transform", gameObject.transform.GetModel());
-	explosionShader.setFloat("time", counter);
+	explosionShader.setFloat("time", counter.ReadCounter());
 }
 
 void MainGame::linkSunShader(GameObject& gameObject)
@@ -172,7 +173,7 @@ void MainGame::linkToonShader(GameObject& gameObject)
 void MainGame::linkEmapping(GameObject& gameObject)
 {
     eMapping.Bind();
-    glBindTextureUnit(0, skybox.GetTextureId());
+    glBindTextureUnit(0, skybox.GetTextureID());
     glBindTextureUnit(1, brickGroundTexture.getID());
 	eMapping.setMat4("model", gameObject.transform.GetModel());
     eMapping.setMat4("view", player.GetViewMatrix());
@@ -184,31 +185,21 @@ void MainGame::linkEmapping(GameObject& gameObject)
 void MainGame::linkADSLighting(GameObject& gameObject)
 {
     adsLighting.Bind();
-
-    adsLighting.setMat4("uModel", gameObject.transform.GetModel());
-    adsLighting.setMat4("uView", player.GetViewMatrix());
-    adsLighting.setMat4("uProjection", player.GetProjectionMatrix());
-
-    adsLighting.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
-    adsLighting.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
-    adsLighting.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    glBindTextureUnit(0, skybox.GetTextureID());    // diffuse
+    glBindTextureUnit(1, redDustTexture.getID());   // specular
+    adsLighting.setInt("material.diffuse", 0);
+    adsLighting.setInt("material.specular", 1);
     adsLighting.setFloat("material.shininess", 32.0f);
+
     adsLighting.setVec3("light.position", ball.transform.GetPos());
-    adsLighting.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-    adsLighting.setVec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-    adsLighting.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-}
+    adsLighting.setVec3("light.ambient", glm::vec3(0.2f));
+    adsLighting.setVec3("light.diffuse", glm::vec3(0.5f));
+    adsLighting.setVec3("light.specular", glm::vec3(1.0f));
 
-void MainGame::UpdateDeltaTime()
-{
-	// potentially quite error prone and messy, but it seems to work for now.
-	// 1. get the current time
-	// 2. get period of time between current and last frames
-	// 3. and then update the last frame time for the next cycle
+    adsLighting.setMat4("model", gameObject.transform.GetModel());
+    adsLighting.setMat4("view", player.GetViewMatrix());
+    adsLighting.setMat4("projection", player.GetProjectionMatrix());
 
-	std::chrono::steady_clock::time_point currentFrameTime = std::chrono::high_resolution_clock::now();
-	deltaTime = std::chrono::duration<float, std::chrono::seconds::period>(currentFrameTime - lastFrameTime).count();
-	lastFrameTime = currentFrameTime;
 }
 
 void MainGame::InitGameObjects()
@@ -230,7 +221,7 @@ void MainGame::UpdateAllGameObjects()
 	// shaders
 
 	// casterNPC
-	casterNPC.UpdateDT(deltaTime);
+	casterNPC.UpdateDT(deltaTime.GetDT_ms());
 	UpdateGameObject(casterNPC,
 		casterNPC.transform.GetPos(),
 		casterNPC.transform.GetRot(),
@@ -240,16 +231,16 @@ void MainGame::UpdateAllGameObjects()
 
 	// monkey
 	UpdateGameObject(monkey,
-		glm::vec3(sin(counter += deltaTime), 0, 0),
-		glm::vec3(0, counter * 0.5f, 0),
+		glm::vec3(counter.ReadCounter(), 0, 0),
+		glm::vec3(0, counter.ReadCounter() * 0.5f, 0),
 		glm::vec3(1, 1, 1),
 		std::bind(&MainGame::linkExplosionShader, this, std::placeholders::_1),
 		false);
 
 	// ball
 	UpdateGameObject(ball,
-		glm::vec3(cos(counter + deltaTime/1) * SUN_DISTANCE, sin(counter + deltaTime/ 1) * SUN_DISTANCE/4, sin(counter + deltaTime/ 100.0f) * SUN_DISTANCE),
-		glm::vec3(0, 0, -counter * 0.5f),
+		glm::vec3(cos(deltaTime.GetDT_sec()) * SUN_DISTANCE, sin(counter.ReadCounter() + deltaTime.GetDT_sec()) * SUN_DISTANCE / 4, sin(counter.ReadCounter() + deltaTime.GetDT_sec() / 100.0f) * SUN_DISTANCE),
+		glm::vec3(0, 0, -counter.ReadCounter() * 0.5f),
 		glm::vec3(3, 3, 3),
 		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
 		false);
@@ -306,7 +297,6 @@ void MainGame::DrawGame()
 
     skybox.draw(&player);
 	UpdateAllGameObjects();
-	counter += deltaTime;
 
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnd();

@@ -7,8 +7,9 @@
 #include <chrono>
 #include "Audio.h"
 #include "Camera.h"
-#include "Display.h" 
 #include "CharacterList.h"
+#include "Display.h" 
+#include "GameClock.h"
 #include "SkyBox.h"
 
 enum class GameState{PLAY, EXIT};
@@ -38,13 +39,15 @@ private:
 	
 
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
-	void UpdateDeltaTime();
 	void InitGameObjects();
 	void UpdateAllGameObjects();
 	void UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod, bool useIndices);
 	
 
 	//void playAudio(unsigned int Source, glm::vec3 pos);
+
+    gc::dt& deltaTime = gc::dt::Instance(); // singleton
+    gc::counter& counter = gc::counter::Instance(); // singleton
 
 	Display _gameDisplay;
 	GameState _gameState;
@@ -80,10 +83,6 @@ private:
 	Projectile fireball;
 
 	CasterNPC casterNPC;
-
-	float counter;
-	std::chrono::high_resolution_clock::time_point lastFrameTime;
-	float deltaTime;
 
 	unsigned int whistle;
 	unsigned int backGroundMusic;
