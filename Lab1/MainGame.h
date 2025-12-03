@@ -14,6 +14,7 @@
 
 enum class GameState{PLAY, EXIT};
 
+#define DESIRED_FPS 60
 
 class MainGame
 {
@@ -40,7 +41,7 @@ private:
 
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
 	void InitGameObjects();
-	void UpdateAllGameObjects();
+	void UpdateAllGameObjects(float dt);
 	void UpdateGameObject(GameObject& gO, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::function<void(GameObject&)> linkerMethod, bool useIndices);
 	
 

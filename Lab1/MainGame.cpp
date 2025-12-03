@@ -67,22 +67,21 @@ void MainGame::GameLoop()
         counter.IncrementCounter(1);
         deltaTime._deltaTimeFrameStart();
 		ProcessInput();
-		UpdateAllGameObjects();
+		UpdateAllGameObjects(deltaTime.GetDT_sec());
 		DrawGame();
         deltaTime._deltaTimeFrameEnd();
-        deltaTime.CapFrameRate(24);
+        deltaTime.CapFrameRate(DESIRED_FPS);
 
-        std::printf("DT: %.2f ms, Counter: %d\r", deltaTime.GetDT_ms(), counter.ReadCounter());
-        std::printf("\n");
-		//collision(monkeyMesh.getSpherePos(), monkeyMesh.getSphereRadius(), ballMesh.getSpherePos(), ballMesh.getSphereRadius());
-		//playAudio(backGroundMusic, glm::vec3(0.0f,0.0f,0.0f));
+        
+        std::printf("\rDT: %.2f ms, Counter: %d\r", deltaTime.GetDT_ms(), counter.ReadCounter());
+        fflush(stdout);
 	}
 }
 
 void MainGame::ProcessInput()
 {
 	SDL_Event evnt;
-	player.Update(deltaTime.GetDT_ms());
+	player.Update(deltaTime.GetDT_sec());
 
 	while (SDL_PollEvent(&evnt)) //get and process events
 	{
@@ -147,7 +146,7 @@ void MainGame::linkExplosionShader(GameObject& gameObject)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	explosionShader.Bind();
 	explosionShader.setMat4("transform", gameObject.transform.GetModel());
-	explosionShader.setFloat("time", counter.ReadCounter());
+	explosionShader.setFloat("time", (float)counter.ReadCounter() / DESIRED_FPS * 0.5f);
 }
 
 void MainGame::linkSunShader(GameObject& gameObject)
@@ -212,16 +211,16 @@ void MainGame::InitGameObjects()
 	casterNPC.SetPatrolPoints(glm::vec3(10, 0, 0), glm::vec3(-3, 0, 5));
 }
 
-void MainGame::UpdateAllGameObjects()
+void MainGame::UpdateAllGameObjects(float dt)
 {
 	// GameObject
 	// positional modifiers
 	// rotational modifiers
-	// GameObject in_scale
+	// GameObject scaling
 	// shaders
 
 	// casterNPC
-	casterNPC.UpdateDT(deltaTime.GetDT_ms());
+	casterNPC.UpdateDT(dt);
 	UpdateGameObject(casterNPC,
 		casterNPC.transform.GetPos(),
 		casterNPC.transform.GetRot(),
@@ -231,16 +230,16 @@ void MainGame::UpdateAllGameObjects()
 
 	// monkey
 	UpdateGameObject(monkey,
-		glm::vec3(counter.ReadCounter(), 0, 0),
-		glm::vec3(0, counter.ReadCounter() * 0.5f, 0),
+		glm::vec3(0, 0, 5),
+        glm::vec3(0.0f, (counter.ReadCounter() / (DESIRED_FPS * 0.75f)), 0.0f),
 		glm::vec3(1, 1, 1),
 		std::bind(&MainGame::linkExplosionShader, this, std::placeholders::_1),
 		false);
 
 	// ball
 	UpdateGameObject(ball,
-		glm::vec3(cos(deltaTime.GetDT_sec()) * SUN_DISTANCE, sin(counter.ReadCounter() + deltaTime.GetDT_sec()) * SUN_DISTANCE / 4, sin(counter.ReadCounter() + deltaTime.GetDT_sec() / 100.0f) * SUN_DISTANCE),
-		glm::vec3(0, 0, -counter.ReadCounter() * 0.5f),
+        glm::vec3(cos((counter.ReadCounter() / (DESIRED_FPS * 0.75f))) * SUN_DISTANCE, sin((counter.ReadCounter() / (DESIRED_FPS * 0.75f))) * (SUN_DISTANCE * 0.25f), sin((counter.ReadCounter() / (DESIRED_FPS * 0.75f))) * SUN_DISTANCE),
+		glm::vec3(0, 0, -counter.ReadCounter()/DESIRED_FPS),
 		glm::vec3(3, 3, 3),
 		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
 		false);
@@ -296,7 +295,7 @@ void MainGame::DrawGame()
 	_gameDisplay.clearDisplay(0.35f, 0.4f, 0.5f, 0.5f); //sets our background colour
 
     skybox.draw(&player);
-	UpdateAllGameObjects();
+	UpdateAllGameObjects(deltaTime.GetDT_sec());
 
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnd();
