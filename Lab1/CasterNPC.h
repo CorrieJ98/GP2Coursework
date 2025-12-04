@@ -4,8 +4,9 @@
 
 class CasterNPC : public Character {
 public:
-    CasterNPC() : canShoot(true), abilityCooldown(3.0f), currentCooldown(0.0f), patrolForward(true) {}
+    CasterNPC() : canShoot(false), abilityCooldown(3.0f), currentCooldown(0.0f), patrolForward(true), fireball(Projectile()) {}
 
+    // TODO use std::vector and loop through to get patrol points
     void SetPatrolPoints(glm::vec3 pointA, glm::vec3 pointB) {
         patrolPointA = pointA;
         patrolPointB = pointB;
@@ -24,7 +25,7 @@ private:
     void CastFireball(glm::vec3 targetPos);
     void CooldownLoop(float dt);
 
-    Projectile fireball;
+    Projectile& fireball;
     bool canShoot;
     float abilityCooldown;
     float currentCooldown;

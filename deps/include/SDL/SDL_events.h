@@ -534,7 +534,7 @@ typedef union SDL_Event
     SDL_MouseButtonEvent button;    /**< Mouse button event data */
     SDL_MouseWheelEvent wheel;      /**< Mouse wheel event data */
     SDL_JoyAxisEvent jaxis;         /**< Joystick axis event data */
-    SDL_JoyBallEvent jball;         /**< Joystick ball event data */
+    SDL_JoyBallEvent jball;         /**< Joystick sun event data */
     SDL_JoyHatEvent jhat;           /**< Joystick hat event data */
     SDL_JoyButtonEvent jbutton;     /**< Joystick button event data */
     SDL_JoyDeviceEvent jdevice;     /**< Joystick device change event data */

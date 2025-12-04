@@ -1,8 +1,6 @@
 #include "MainGame.h"
 
 
-//Transform transform;
-
 MainGame::MainGame()
 {
 	_gameState = GameState::PLAY;
@@ -36,13 +34,14 @@ void MainGame::InitSystems()
 	sunShader.init("..\\res\\sunShader.vert", "..\\res\\sunShader.frag");
 	eMapping.init("..\\res\\envMapping.vert", "..\\res\\envMapping.frag");
     adsLighting.init("..\\res\\ADS.vert", "..\\res\\ADS.frag");
-
+    fireballShader.init("..\\res\\fireball.vert", "..\\res\\fireball.frag");
 
 	waterTexture.load("..\\res\\water.jpg"); //load texture
 	brickWallTexture.load("..\\res\\brickwall.jpg");
 	brickGroundTexture.load("..\\res\\bricks.jpg");
 	redDustTexture.load("..\\res\\redDust.jpg");
-	
+    noiseTexture.load("..\\res\\noise.png");
+
     skybox.init(std::vector<std::string>{
         "..\\res\\skybox\\right.jpg",
             "..\\res\\skybox\\left.jpg",
@@ -73,9 +72,8 @@ void MainGame::GameLoop()
         deltaTime.CapFrameRate(DESIRED_FPS);
 
         
-        std::printf(" Frame Time: %.2f ms, Target FPS: %d, Current FPS: %.2f, Counter: %d \n",deltaTime.GetDT_ms(), DESIRED_FPS, 1000.0f / deltaTime.GetDT_ms(), counter.ReadCounter());
-        //std::printf("\rTarget FPS: %d, Frame Time: %.2f ms, Counter: %d\r",DESIRED_FPS, deltaTime.GetDT_ms(), counter.ReadCounter());
-        //fflush(stdout);
+        std::printf(" Frame Time: %.2f ms, Target FPS: %d, Current FPS: %.2f, Counter: %d \r",deltaTime.GetDT_ms(), DESIRED_FPS, 1000.0f / deltaTime.GetDT_ms(), counter.ReadCounter());
+        fflush(stdout);
 	}
 }
 
@@ -191,7 +189,7 @@ void MainGame::linkADSLighting(GameObject& gameObject)
     adsLighting.setInt("material.specular", 1);
     adsLighting.setFloat("material.shininess", 32.0f);
 
-    adsLighting.setVec3("light.position", ball.transform.GetPos());
+    adsLighting.setVec3("light.position", sun.transform.GetPos());
     adsLighting.setVec3("light.ambient", glm::vec3(0.2f));
     adsLighting.setVec3("light.diffuse", glm::vec3(0.5f));
     adsLighting.setVec3("light.specular", glm::vec3(1.0f));
@@ -202,12 +200,28 @@ void MainGame::linkADSLighting(GameObject& gameObject)
 
 }
 
+void MainGame::linkFireballShader(GameObject& gameObject)
+{
+    fireballShader.Bind();
+    glBindTextureUnit(0, noiseTexture.getID());
+
+    fireballShader.setMat4("model", gameObject.transform.GetModel());
+    fireballShader.setMat4("view", player.GetViewMatrix());
+    fireballShader.setMat4("projection", player.GetProjectionMatrix());
+
+    fireballShader.setFloat("uTime", (float)counter.ReadCounter() / DESIRED_FPS);
+    
+
+}
+
 void MainGame::InitGameObjects()
 {
 	monkey.init(monkeyMesh, explosionShader, waterTexture, true);
-	ball.init(ballMesh, fogShader, brickWallTexture, true);
+    ball.init(ballMesh, fireballShader, redDustTexture, true);
+    sun.init(ballMesh, fogShader, brickWallTexture, true);
 	plane.init(planeMesh, fogShader, brickGroundTexture, true);
 	casterNPC.init(capsuleMesh, adsLighting, redDustTexture, true);
+    fireball.init(ballMesh, fireballShader, redDustTexture, false);
 	//casterNPC.SetProjectile(fireball);
 	casterNPC.SetPatrolPoints(glm::vec3(10, -2, 5), glm::vec3(-3, -2, 5));
 }
@@ -219,6 +233,7 @@ void MainGame::UpdateAllGameObjects(float dt)
 	// rotational modifiers
 	// GameObject scaling
 	// shaders
+    // alt draw method
 
 	// casterNPC
 	casterNPC.UpdateDT(dt);
@@ -229,6 +244,14 @@ void MainGame::UpdateAllGameObjects(float dt)
 		std::bind(&MainGame::linkADSLighting, this, std::placeholders::_1),
 		false);
 
+    // ball
+    UpdateGameObject(ball,
+        glm::vec3(5, 0, 9),
+        glm::vec3(0, 0, 0),
+        glm::vec3(1, 1, 1),
+        std::bind(&MainGame::linkFireballShader, this, std::placeholders::_1),
+        false);
+
 	// monkey
 	UpdateGameObject(monkey,
 		glm::vec3(0, 0, 5),
@@ -237,8 +260,8 @@ void MainGame::UpdateAllGameObjects(float dt)
 		std::bind(&MainGame::linkExplosionShader, this, std::placeholders::_1),
 		false);
 
-	// ball
-	UpdateGameObject(ball,
+	// sun
+	UpdateGameObject(sun,
         glm::vec3(cos((counter.ReadCounter() / (DESIRED_FPS * 0.75f))) * SUN_DISTANCE, sin((counter.ReadCounter() / (DESIRED_FPS * 0.75f))) * (SUN_DISTANCE * 0.25f), sin((counter.ReadCounter() / (DESIRED_FPS * 0.75f))) * SUN_DISTANCE),
 		glm::vec3(0, 0, -counter.ReadCounter()/DESIRED_FPS),
 		glm::vec3(3, 3, 3),
@@ -246,12 +269,12 @@ void MainGame::UpdateAllGameObjects(float dt)
 		false);
 
 	// fireball
-	UpdateGameObject(fireball,
-		fireball.transform.GetPos(),
-		fireball.transform.GetRot(),
-		fireball.transform.GetScale(),
-		std::bind(&MainGame::linkExplosionShader, this, std::placeholders::_1),
-		false);
+	//UpdateGameObject(fireball,
+	//	fireball.transform.GetPos(),
+	//	fireball.transform.GetRot(),
+	//	fireball.transform.GetScale(),
+	//	std::bind(&MainGame::linkFireballShader, this, std::placeholders::_1),
+	//	false);
 
 	// ground plane
 	UpdateGameObject(plane,
@@ -266,7 +289,6 @@ void MainGame::UpdateAllGameObjects(float dt)
 
 void MainGame::UpdateGameObject(GameObject& gO, glm::vec3 in_pos, glm::vec3 in_rot, glm::vec3 in_scale, std::function<void(GameObject&)> linkerMethod, bool altDrawingMethod)
 {
-	
 	gO.transform.SetPos(in_pos);
 	gO.transform.SetRot(in_rot);
 	gO.transform.SetScale(in_scale);

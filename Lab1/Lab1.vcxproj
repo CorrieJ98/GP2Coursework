@@ -83,6 +83,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="obj_loader.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="stb_image.c" />
@@ -127,6 +128,8 @@
     <None Include="..\res\shaderToon.vert" />
     <None Include="bricks.frag" />
     <None Include="bricks.vert" />
+    <None Include="fireball.frag" />
+    <None Include="fireball.vert" />
     <None Include="notes.md" />
   </ItemGroup>
   <ItemGroup>

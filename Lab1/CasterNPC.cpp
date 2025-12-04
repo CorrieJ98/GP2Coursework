@@ -4,7 +4,7 @@ void CasterNPC::UpdateDT(float dt)
 {
 	SetMoveable(true);
 	Patrol(dt);
-	CooldownLoop(dt);
+	//CooldownLoop(dt);
 
 	//std::cout << "currentCD: " << currentCooldown << std::endl;
 	//std::cout << "abilityCD: " << abilityCooldown << std::endl;
@@ -31,12 +31,8 @@ void CasterNPC::Patrol(float dt) {
 }
 
 void CasterNPC::CastFireball(glm::vec3 targetPos) {
-		std::cout << "CastFireball() called from CasterNPC" << '\n';
-		glm::vec3 forward = glm::rotate(glm::mat4(1.0f), glm::radians(transform.GetRot().y), glm::vec3(0, 1, 0)) * glm::vec4(0, 0, 1, 0);
-		glm::vec3 direction = glm::normalize(targetPos - this->transform.GetPos());
-		GetProjectileObj().Launch(GetAttackOrigin(), direction);
-		std::cout << "Fireball launched towards (" << targetPos.x << ", " << targetPos.y << ", " << targetPos.z << ")\n";
-		std::cout << "Fireball current location (" << GetProjectileObj().transform.GetPos().x << ", " << GetProjectileObj().transform.GetPos().y << ", " << GetProjectileObj().transform.GetPos().z << ")\n";
+    fireball.transform.SetPos(transform.GetPos());
+
 }
 
 void CasterNPC::CooldownLoop(float dt)

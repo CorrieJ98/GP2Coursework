@@ -28,7 +28,7 @@ public:
 	glm::vec3 GetCoM() { return this->m_centreMass; }
 	std::string GetName() { return this->m_characterName; }
 	
-	void SetProjectile(Projectile proj) { this->m_projectile = proj; }
+	void SetProjectile(Projectile& proj) { this->m_projectile = proj; }
 	void SetHealth(int health) { this->m_health = health; }
 	void SetDamage(int damage) { this->m_damage = damage; }
 	void SetMoveSpeed(float moveSpeed) { this->m_moveSpeed = moveSpeed; }

@@ -12,9 +12,9 @@
 #include "GameClock.h"
 #include "SkyBox.h"
 
-enum class GameState{PLAY, EXIT};
-
 #define DESIRED_FPS 60
+
+enum class GameState{PLAY, EXIT};
 
 class MainGame
 {
@@ -37,7 +37,7 @@ private:
 	void linkSunShader(GameObject& gameObject);
 	void linkEmapping(GameObject& gameObject);
     void linkADSLighting(GameObject& gameObject);
-	
+    void linkFireballShader(GameObject& gameObject);
 
 	bool collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2Rad);
 	void InitGameObjects();
@@ -66,16 +66,19 @@ private:
 	Shader sunShader;
 	Shader eMapping;
     Shader adsLighting;
+    Shader fireballShader;
 
 	Texture waterTexture;
 	Texture brickWallTexture;
 	Texture brickGroundTexture;
 	Texture redDustTexture;
+    Texture noiseTexture;
 
     Skybox skybox;
 	
 	GameObject monkey;
-	GameObject ball;
+	GameObject sun;
+    GameObject ball;
 	GameObject plane;
 
 	Projectile fireball;

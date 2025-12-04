@@ -60,6 +60,9 @@
     <ClCompile Include="SkyBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h">
@@ -173,6 +176,8 @@
     <None Include="..\..\..\..\Users\corri\Downloads\GP - Lab 4-Partial Solution(1)\GP - Lab 4-Partial Solution\res\shaderSkybox.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="fireball.vert" />
+    <None Include="fireball.frag" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="..\res\monkey3.obj">

@@ -235,11 +235,11 @@ extern DECLSPEC Uint8 SDLCALL SDL_JoystickGetHat(SDL_Joystick * joystick,
                                                  int hat);
 
 /**
- *  Get the ball axis change since the last poll.
+ *  Get the sun axis change since the last poll.
  *
  *  \return 0, or -1 if you passed it invalid parameters.
  *
- *  The ball indices start at index 0.
+ *  The sun indices start at index 0.
  */
 extern DECLSPEC int SDLCALL SDL_JoystickGetBall(SDL_Joystick * joystick,
                                                 int ball, int *dx, int *dy);
