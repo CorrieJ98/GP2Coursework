@@ -31,16 +31,17 @@ void main()
     FragColor = vec4(color, 1.0);
 }
 
-mat4 rotate(float a, vec3 v)
+// rodrigues rotation
+mat4 rotate(float angle, vec3 axis)
 {
-    float c = cos(a);
-    vec3 ci = (1. - c) * v;
-    vec3 s = sin(a) * v;
+    float c = cos(angle);
+    vec3 ci = (1.0f - c) * axis;
+    vec3 s = sin(angle) * axis;
 
     return mat4(
-        ci.x * v.x + c, ci.x * v.y + s.z, ci.x * v.z - s.y, 0,
-        ci.y * v.x - s.z, ci.y * v.y + c, ci.y * v.z + s.x, 0,
-        ci.z * v.x + s.y, ci.z * v.y - s.x, ci.z * v.z + c, 0,
+        ci.x * axis.x + c, ci.x * axis.y + s.z, ci.x * axis.z - s.y, 0,
+        ci.y * axis.x - s.z, ci.y * axis.y + c, ci.y * axis.z + s.x, 0,
+        ci.z * axis.x + s.y, ci.z * axis.y - s.x, ci.z * axis.z + c, 0,
         0, 0, 0, 1
 	);
 }

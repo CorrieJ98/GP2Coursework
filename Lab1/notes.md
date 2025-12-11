@@ -15,4 +15,6 @@ Change model to be a ball mesh and scale it on Z?
     in MainGame::UpdateGameObject(GameObject&...)
 
 04/12/25
-Culling seems to be broken on the monkey, with the .geom shader.
+Culling seems to be broken on the monkey, with the .geom shader. During
+the animation, it loses all depth properties and displays in front of
+other objects. MVP issue I think

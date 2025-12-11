@@ -6,7 +6,7 @@
 #define DESIRED_FPS 60
 #endif // !DESIRED_FPS
 
-#ifndef GAMECLOCK_H
+#ifndef GAMECLOCK_H // obsolete guard
 #define GAMECLOCK_H
 
 /*
@@ -37,7 +37,7 @@ GameLoop()
 
 namespace gc {
 
-    constexpr float FPS_MAX_FRAME_TIME = 16.6666666667f; // 1000ms / desired FPS (60)
+    constexpr float FPS_MAX_FRAME_TIME = 1000 / DESIRED_FPS; // 60fps = 16.666ms
 
     class counter {
     public:
@@ -99,7 +99,8 @@ namespace gc {
         void CapFrameRate() {
             float frameTime = GetDT_ms();
             if (frameTime < FPS_MAX_FRAME_TIME) {
-                auto sleepDuration = std::chrono::milliseconds(static_cast<int>(FPS_MAX_FRAME_TIME - frameTime));
+                auto sleepDuration = std::chrono::
+                    milliseconds(static_cast<int>(FPS_MAX_FRAME_TIME - frameTime));
                 std::this_thread::sleep_for(sleepDuration);
                 // Update deltaTime after sleeping
                 frameEnd = std::chrono::steady_clock::now();
@@ -111,7 +112,8 @@ namespace gc {
             float frameTime = GetDT_ms();
             float maxFrameTime = 1000.0f / static_cast<float>(fps);
             if (frameTime < (1000 / fps)) {
-                auto sleepDuration = std::chrono::milliseconds(static_cast<int>(maxFrameTime - frameTime));
+                auto sleepDuration = std::chrono::
+                    milliseconds(static_cast<int>(maxFrameTime - frameTime));
                 std::this_thread::sleep_for(sleepDuration);
                 // Update deltaTime after sleeping
                 frameEnd = std::chrono::steady_clock::now();
@@ -123,7 +125,8 @@ namespace gc {
         dt() : deltaTime(0.0f) {} // private constructor
 
         void updateDeltaTime() {
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(frameEnd - frameStart);
+            auto duration = std::chrono::
+                duration_cast<std::chrono::milliseconds>(frameEnd - frameStart);
             deltaTime = static_cast<float>(duration.count());
         }
 
@@ -146,4 +149,8 @@ namespace gc {
 
     Any objects that require the use of delta time can access it via the
     main Update() method and taking deltaTime as a parameter. Easy peasy.
+
+
+    Note that the formatting is a little Rusty in some parts. This is just
+    for ease of filming :)
 */

@@ -218,12 +218,12 @@ void MainGame::InitGameObjects()
 {
 	monkey.init(monkeyMesh, explosionShader, waterTexture, true);
     ball.init(ballMesh, fireballShader, redDustTexture, true);
-    sun.init(ballMesh, fogShader, brickWallTexture, true);
+    sun.init(ballMesh, fireballShader, brickWallTexture, true);
 	plane.init(planeMesh, fogShader, brickGroundTexture, true);
 	casterNPC.init(capsuleMesh, adsLighting, redDustTexture, true);
     fireball.init(ballMesh, fireballShader, redDustTexture, false);
 	//casterNPC.SetProjectile(fireball);
-	casterNPC.SetPatrolPoints(glm::vec3(10, -2, 5), glm::vec3(-3, -2, 5));
+	casterNPC.SetPatrolPoints(glm::vec3(20, -2, 5), glm::vec3(-20, -2, 5));
 }
 
 void MainGame::UpdateAllGameObjects(float dt)
@@ -246,7 +246,7 @@ void MainGame::UpdateAllGameObjects(float dt)
 
     // ball
     UpdateGameObject(ball,
-        glm::vec3(5, 0, 9),
+        glm::vec3(10, 0, -10),
         glm::vec3(0, 0, 0),
         glm::vec3(1, 1, 1),
         std::bind(&MainGame::linkFireballShader, this, std::placeholders::_1),
@@ -254,7 +254,7 @@ void MainGame::UpdateAllGameObjects(float dt)
 
 	// monkey
 	UpdateGameObject(monkey,
-		glm::vec3(0, 0, 5),
+		glm::vec3(0, 0, -15),
         glm::vec3(0.0f, (counter.ReadCounter() / (DESIRED_FPS * 0.75f)), 0.0f),
 		glm::vec3(1, 1, 1),
 		std::bind(&MainGame::linkExplosionShader, this, std::placeholders::_1),
@@ -265,7 +265,7 @@ void MainGame::UpdateAllGameObjects(float dt)
         glm::vec3(cos((counter.ReadCounter() / (DESIRED_FPS * 0.75f))) * SUN_DISTANCE, sin((counter.ReadCounter() / (DESIRED_FPS * 0.75f))) * (SUN_DISTANCE * 0.25f), sin((counter.ReadCounter() / (DESIRED_FPS * 0.75f))) * SUN_DISTANCE),
 		glm::vec3(0, 0, -counter.ReadCounter()/DESIRED_FPS),
 		glm::vec3(3, 3, 3),
-		std::bind(&MainGame::linkFogShader, this, std::placeholders::_1),
+		std::bind(&MainGame::linkFireballShader, this, std::placeholders::_1),
 		false);
 
 	// fireball
