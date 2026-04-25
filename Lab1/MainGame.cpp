@@ -1,4 +1,5 @@
 #include "MainGame.h"
+//#include "PhysicsEngine.h"
 
 
 MainGame::MainGame()
@@ -70,10 +71,10 @@ void MainGame::GameLoop()
 		DrawGame();
         deltaTime._deltaTimeFrameEnd();
         deltaTime.CapFrameRate(DESIRED_FPS);
-
+        //testDLLManager();
         
-        std::printf(" Frame Time: %.2f ms, Target FPS: %d, Current FPS: %.2f, Counter: %d \r",deltaTime.GetDT_ms(), DESIRED_FPS, 1000.0f / deltaTime.GetDT_ms(), counter.ReadCounter());
-        fflush(stdout);
+        //std::printf(" Frame Time: %.2f ms, Target FPS: %d, Current FPS: %.2f, Counter: %d \r",deltaTime.GetDT_ms(), DESIRED_FPS, 1000.0f / deltaTime.GetDT_ms(), counter.ReadCounter());
+        //fflush(stdout);
 	}
 }
 
@@ -151,6 +152,15 @@ void MainGame::linkExplosionShader(GameObject& gameObject)
 void MainGame::linkSunShader(GameObject& gameObject)
 {
 	sunShader.Bind();
+}
+
+void MainGame::SetActiveShader(const Shader& shader)
+{
+
+}
+
+void MainGame::ApplyActiveShader()
+{
 }
 
 void MainGame::linkFogShader(GameObject& gameObject)
@@ -323,4 +333,17 @@ void MainGame::DrawGame()
 	glEnd();
 
 	_gameDisplay.swapBuffer();
+}
+
+void MainGame::testDLLManager()
+{
+    DLLManager& dllM= DLLManager::getInstance();
+    dllM.loadDLL("Fiziks.dll");
+    
+    dllM.getFunction<void(*)()>("Fiziks.dll", "HelloWorld")();
+
+    using HelloWorld_ = void(*)();
+    HelloWorld_ HelloWorld = dllM.getFunction<HelloWorld_>("Fiziks.dll", "HelloWorld");
+
+    HelloWorld();
 }

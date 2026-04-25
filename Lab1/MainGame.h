@@ -1,16 +1,18 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <functional>
-#include <SDL\SDL.h>
-#include <GL/glew.h>
-#include <chrono>
 #include "Audio.h"
 #include "Camera.h"
 #include "CharacterList.h"
 #include "Display.h" 
+#include "DLLManager.h"
 #include "GameClock.h"
+#include "ShaderManager.h"
 #include "SkyBox.h"
+#include <chrono>
+#include <functional>
+#include <GL/glew.h>
+#include <iostream>
+#include <SDL\SDL.h>
+#include <string>
 
 #define DESIRED_FPS 60
 
@@ -29,6 +31,12 @@ private:
 	void ProcessInput();
 	void GameLoop();
 	void DrawGame();
+
+    void testDLLManager();
+
+
+    void SetActiveShader(const Shader& shader);
+    void ApplyActiveShader();
 
 	void linkFogShader(GameObject& gameObject);
 	void linkToonShader(GameObject& gameObject);
