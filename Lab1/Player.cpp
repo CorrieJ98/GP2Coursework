@@ -43,19 +43,18 @@ void Player::ParseInputs(float dt)
 
 	// Right Arrow
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-		YawFixed(-GetCamTurnSpeed() * dt);
+		Yaw(-GetCamTurnSpeed() * dt);
 	}
 
 	// Left Arrow
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
-		YawFixed(GetCamTurnSpeed() * dt);
+		Yaw(GetCamTurnSpeed() * dt);
 	}
 	
 
 	// TODO pitch modifies the Yaw axis, meaning the camera X axis can Roll
 	// off of the horizon...not sure how to fix this at all, disabling Pitch for now.
 
-	/*
 	// Up Arrow
 	if (GetAsyncKeyState(VK_UP) & 0x8000) {
 		Pitch(-GetCamTurnSpeed() * dt);
@@ -65,7 +64,7 @@ void Player::ParseInputs(float dt)
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
 		Pitch(GetCamTurnSpeed() * dt);
 	}
-	*/
+
 #pragma endregion
 
 

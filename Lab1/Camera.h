@@ -79,40 +79,24 @@ public:
 		m_pos += glm::cross(m_up, m_forward) * amt;
 	}
 
-	// For some reason the code between Yaw and Pitch does the opposite...
-	// Instead of reworking them, I simply changed the names. I understand
-	// that the name of each of these methods does not match the content,
-	// but the end result does. This saves time, sanity and solves this problem.
-	/*void YawRelative(float angle)
+	// Yaw rotates around the world Y axis so heading remains level.
+	void Yaw(float angle)
 	{
-		glm::vec3 right = glm::normalize(glm::cross(m_up, m_forward));
+		static const glm::vec3 WORLD_UP(0.0f, 1.0f, 0.0f);
 
-		m_forward = glm::vec3(glm::normalize(glm::rotate(angle, right) * glm::vec4(m_forward, 0.0)));
-		m_up = glm::normalize(glm::cross(m_forward, right));
-	}*/
+		m_forward = glm::vec3(glm::normalize(glm::rotate(angle, WORLD_UP) * glm::vec4(m_forward, 0.0)));
 
-	// TODO rotate on Z axis opposite of pitch angle to ensure
-	// angle to ground is always perpendicular
-
-	void YawFixed(float angle)
-	{
-		glm::vec3 projectedUp = glm::normalize(m_up);
-
-		glm::vec3 yawAxis = glm::normalize(glm::cross(glm::cross(m_forward, projectedUp), m_forward));
-
-		m_forward = glm::vec3(glm::normalize(glm::rotate(angle, yawAxis) * glm::vec4(m_forward, 0.0)));
-
-		glm::vec3 right = glm::normalize(glm::cross(projectedUp, m_forward));
+		glm::vec3 right = glm::normalize(glm::cross(WORLD_UP, m_forward));
 		m_up = glm::normalize(glm::cross(m_forward, right));
 	}
 
+	// Pitch should rotate around the camera's right axis (not the camera up).
 	void Pitch(float angle)
 	{
 		if (m_pitchEnabled)
 		{
-			m_forward = glm::vec3(glm::normalize(glm::rotate(angle, m_up) * glm::vec4(m_forward, 0.0)));
 			glm::vec3 right = glm::normalize(glm::cross(m_up, m_forward));
-
+			m_forward = glm::vec3(glm::normalize(glm::rotate(angle, right) * glm::vec4(m_forward, 0.0)));
 			m_up = glm::normalize(glm::cross(m_forward, right));
 		}
 	}

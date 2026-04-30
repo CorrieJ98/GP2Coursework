@@ -51,7 +51,7 @@ void MainGame::InitSystems()
             "..\\res\\skybox\\back.jpg"
     });
 
-	player.initCamera(player.transform.GetPos(), 70.0f, (float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 2000.0f, 4.0f, 1.5f, false);
+	player.initCamera(player.transform.GetPos(), 70.0f, (float)_gameDisplay.getWidth() / _gameDisplay.getHeight(), 0.01f, 2000.0f, 4.0f, 1.5f, true);
 
 	InitGameObjects();
 
@@ -111,23 +111,6 @@ bool MainGame::collision(glm::vec3 m1Pos, float m1Rad, glm::vec3 m2Pos, float m2
 	}
 }
 
-//void MainGame::playAudio(unsigned int Source, glm::vec3 pos)
-//{
-//	
-//	ALint state; 
-//	alGetSourcei(Source, AL_SOURCE_STATE, &state);
-//	/*
-//	Possible values of state
-//	AL_INITIAL
-//	AL_STOPPED
-//	AL_PLAYING
-//	AL_PAUSED
-//	*/
-//	if (AL_PLAYING != state)
-//	{
-//		audioDevice.playSound(Source, pos);
-//	}
-//}
 void MainGame::linkRimShader(GameObject& gameObject)
 {
 	glEnable(GL_BLEND);
