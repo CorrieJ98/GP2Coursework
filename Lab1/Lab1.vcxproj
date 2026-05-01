@@ -77,6 +77,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CasterNPC.cpp" />
     <ClCompile Include="Display.cpp" />
+    <ClCompile Include="DLLManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="CharacterList.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Display.h" />
+    <ClInclude Include="DLLManager.h" />
     <ClInclude Include="GameClock.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="MainGame.h" />
